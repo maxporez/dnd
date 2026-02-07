@@ -1,0 +1,330 @@
+.character-sheet {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  padding-bottom: 2rem;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: var(--accent-color);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.character-name {
+  flex: 1;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+.character-name:focus {
+  outline: none;
+  border-bottom-color: var(--accent-color);
+}
+
+/* Basic Info */
+.basic-info {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row .label {
+  color: var(--text-secondary);
+}
+
+.info-row .value {
+  font-weight: 500;
+}
+
+/* Select & Input styles */
+.select-input {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  min-width: 140px;
+  cursor: pointer;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.level-input {
+  width: 60px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.level-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+/* Main Stats */
+.main-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.stat-box {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.hp-box {
+  grid-column: span 1;
+}
+
+.hp-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.hp-current {
+  width: 40px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding: 0.25rem;
+}
+
+.hp-separator {
+  color: var(--text-secondary);
+}
+
+.hp-max {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* Sections */
+section {
+  margin-bottom: 1.5rem;
+}
+
+section h2 {
+  font-size: 1rem;
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+section h2 .hint {
+  font-size: 0.75rem;
+  font-weight: normal;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Abilities Section */
+.abilities-section {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Skills Section */
+.skills-section {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25rem;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  transition: background-color 0.1s;
+}
+
+.skill-row.clickable {
+  cursor: pointer;
+}
+
+.skill-row.clickable:hover {
+  background: var(--input-bg);
+}
+
+.skill-row.proficient .skill-name,
+.skill-row.expert .skill-name {
+  font-weight: 500;
+}
+
+.skill-prof {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.skill-row.proficient .skill-prof,
+.skill-row.expert .skill-prof {
+  color: var(--accent-color);
+}
+
+.skill-bonus {
+  min-width: 25px;
+  text-align: right;
+  font-weight: 500;
+}
+
+.skill-name {
+  color: var(--text-secondary);
+}
+
+/* Saves Section */
+.saves-section {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.saves-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.save-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--input-bg);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.save-row.clickable {
+  cursor: pointer;
+}
+
+.save-row.clickable:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.save-row.proficient {
+  background: var(--accent-color);
+  color: white;
+}
+
+.save-prof {
+  font-size: 0.625rem;
+}
+
+.save-bonus {
+  font-weight: 500;
+}
+
+/* Proficiency & Passive */
+.proficiency-section,
+.passive-section {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.proficiency-bonus,
+.passive-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.proficiency-bonus .value,
+.passive-stat .value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+}
+
+/* Loading & Error states */
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+}
+
+.error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

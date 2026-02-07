@@ -1,0 +1,53 @@
+.ability-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.ability-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-width: 60px;
+}
+
+.ability-name {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ability-modifier {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin: 0.25rem 0;
+}
+
+.ability-value {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  width: 40px;
+}
+
+input.ability-value {
+  -moz-appearance: textfield;
+}
+
+input.ability-value::-webkit-outer-spin-button,
+input.ability-value::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
