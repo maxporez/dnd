@@ -34,7 +34,7 @@ export function Home() {
   return (
     <div className="home">
       <header className="home-header">
-        <h1>D&D Character Sheet</h1>
+        <h1>D&D Grimoire</h1>
         <p className="subtitle">Gestionnaire de fiches 5.5</p>
       </header>
 
