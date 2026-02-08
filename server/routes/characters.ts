@@ -2,12 +2,12 @@
 // Characters can be pushed to Notion for backup/viewing and pulled back
 
 import { Router } from 'express';
-import { getNotionClient } from '../notion/client';
-import { getDatabaseIds } from '../notion/databases';
+import { getNotionClient } from '../notion/client.js';
+import { getDatabaseIds } from '../notion/databases.js';
 import {
   notionPageToCharacter,
   characterToNotionProperties,
-} from '../notion/mappers';
+} from '../notion/mappers.js';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
 export const charactersRouter = Router();

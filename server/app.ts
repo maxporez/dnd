@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { gameDataRouter } from './routes/gameData';
-import { charactersRouter } from './routes/characters';
-import { syncRouter } from './routes/sync';
+import { gameDataRouter } from './routes/gameData.js';
+import { charactersRouter } from './routes/characters.js';
+import { syncRouter } from './routes/sync.js';
 
 const app = express();
 

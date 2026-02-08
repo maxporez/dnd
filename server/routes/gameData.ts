@@ -2,14 +2,14 @@
 // Reads from and writes to Notion databases
 
 import { Router } from 'express';
-import { getNotionClient } from '../notion/client';
-import { getDatabaseIds } from '../notion/databases';
+import { getNotionClient } from '../notion/client.js';
+import { getDatabaseIds } from '../notion/databases.js';
 import {
   notionPageToRace, raceToNotionProperties,
   notionPageToClass, classToNotionProperties,
   notionPageToSpell, spellToNotionProperties,
   notionPageToItem, itemToNotionProperties,
-} from '../notion/mappers';
+} from '../notion/mappers.js';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
 export const gameDataRouter = Router();

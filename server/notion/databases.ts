@@ -2,7 +2,7 @@
 // Each function creates a database with the appropriate properties
 
 import type { CreateDatabaseParameters } from '@notionhq/client/build/src/api-endpoints';
-import { getNotionClient, getParentPageId } from './client';
+import { getNotionClient, getParentPageId } from './client.js';
 
 // Store database IDs after creation
 export interface NotionDatabaseIds {

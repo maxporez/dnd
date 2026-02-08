@@ -2,13 +2,13 @@
 // Handles database creation, configuration, and status checks
 
 import { Router } from 'express';
-import { getNotionClient } from '../notion/client';
+import { getNotionClient } from '../notion/client.js';
 import {
   setupAllDatabases,
   getDatabaseIds,
   setDatabaseIds,
   type NotionDatabaseIds,
-} from '../notion/databases';
+} from '../notion/databases.js';
 
 export const syncRouter = Router();
 
