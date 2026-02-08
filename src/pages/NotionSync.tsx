@@ -1,0 +1,280 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  getNotionStatus,
+  setupDatabases,
+  configureDatabases,
+  type NotionStatus,
+} from '../services/notion/notionApi';
+import {
+  syncAllFromNotion,
+  pushAllCharactersToNotion,
+} from '../services/notion/notionSync';
+import { getAllCharacters } from '../services/storage/characterService';
+import type { Character } from '../types';
+import './NotionSync.css';
+
+type SyncState = 'idle' | 'syncing' | 'success' | 'error';
+
+export function NotionSync() {
+  const navigate = useNavigate();
+  const [status, setStatus] = useState<NotionStatus | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [syncState, setSyncState] = useState<SyncState>('idle');
+  const [syncMessage, setSyncMessage] = useState('');
+  const [syncProgress, setSyncProgress] = useState(0);
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [dbIds, setDbIds] = useState({
+    characters: '',
+    races: '',
+    classes: '',
+    spells: '',
+    items: '',
+  });
+
+  const refreshStatus = useCallback(async () => {
+    try {
+      setLoading(true);
+      const s = await getNotionStatus();
+      setStatus(s);
+      if (s.databases) {
+        setDbIds({
+          characters: s.databases.characters || '',
+          races: s.databases.races || '',
+          classes: s.databases.classes || '',
+          spells: s.databases.spells || '',
+          items: s.databases.items || '',
+        });
+      }
+    } catch {
+      setStatus(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshStatus();
+    getAllCharacters().then(setCharacters);
+  }, [refreshStatus]);
+
+  const handleSetup = async () => {
+    setSyncState('syncing');
+    setSyncMessage('Création des bases Notion...');
+    try {
+      const result = await setupDatabases();
+      setDbIds({
+        characters: result.databases.characters || '',
+        races: result.databases.races || '',
+        classes: result.databases.classes || '',
+        spells: result.databases.spells || '',
+        items: result.databases.items || '',
+      });
+      setSyncState('success');
+      setSyncMessage('Bases de données créées avec succès !');
+      await refreshStatus();
+    } catch (error) {
+      setSyncState('error');
+      setSyncMessage(error instanceof Error ? error.message : 'Erreur lors de la création');
+    }
+  };
+
+  const handleConfigure = async () => {
+    setSyncState('syncing');
+    setSyncMessage('Configuration des bases...');
+    try {
+      const result = await configureDatabases(dbIds);
+      const invalid = Object.entries(result.validations).filter(([, v]) => !v);
+      if (invalid.length > 0) {
+        setSyncState('error');
+        setSyncMessage(`Bases invalides: ${invalid.map(([k]) => k).join(', ')}`);
+      } else {
+        setSyncState('success');
+        setSyncMessage('Configuration enregistrée !');
+        await refreshStatus();
+      }
+    } catch (error) {
+      setSyncState('error');
+      setSyncMessage(error instanceof Error ? error.message : 'Erreur de configuration');
+    }
+  };
+
+  const handleSyncFromNotion = async () => {
+    setSyncState('syncing');
+    try {
+      const results = await syncAllFromNotion((msg, progress) => {
+        setSyncMessage(msg);
+        setSyncProgress(progress);
+      });
+      setSyncState('success');
+      setSyncMessage(
+        `Sync terminée : ${results.races} races, ${results.classes} classes, ${results.spells} sorts, ${results.items} objets`
+      );
+    } catch (error) {
+      setSyncState('error');
+      setSyncMessage(error instanceof Error ? error.message : 'Erreur de synchronisation');
+    }
+  };
+
+  const handlePushCharacters = async () => {
+    setSyncState('syncing');
+    try {
+      const count = await pushAllCharactersToNotion(characters, (msg, progress) => {
+        setSyncMessage(msg);
+        setSyncProgress(progress);
+      });
+      setSyncState('success');
+      setSyncMessage(`${count} personnage(s) envoyé(s) vers Notion`);
+    } catch (error) {
+      setSyncState('error');
+      setSyncMessage(error instanceof Error ? error.message : 'Erreur de synchronisation');
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">Vérification de la connexion Notion...</div>;
+  }
+
+  return (
+    <div className="notion-sync">
+      <header className="notion-header">
+        <button className="back-button" onClick={() => navigate('/')}>
+          &larr; Retour
+        </button>
+        <h1>Notion Back-Office</h1>
+        <p className="subtitle">Gérez vos données D&D depuis Notion</p>
+      </header>
+
+      {/* Connection Status */}
+      <section className="section">
+        <h2>Connexion</h2>
+        <div className={`status-card ${status?.connected ? 'connected' : 'disconnected'}`}>
+          <div className="status-indicator" />
+          <div>
+            <p className="status-text">
+              {status?.connected
+                ? `Connecté en tant que ${status.user}`
+                : status?.error || 'Serveur non disponible'}
+            </p>
+            {!status?.connected && (
+              <p className="status-hint">
+                Lancez le serveur avec <code>npm run dev</code> et configurez .env
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {status?.connected && (
+        <>
+          {/* Database Setup */}
+          <section className="section">
+            <h2>Bases de données Notion</h2>
+
+            {!status.configured ? (
+              <div className="setup-section">
+                <p className="info-text">
+                  Les bases de données Notion n'ont pas encore été créées. Vous pouvez les créer
+                  automatiquement ou entrer les IDs de bases existantes.
+                </p>
+
+                <button
+                  className="action-button primary"
+                  onClick={handleSetup}
+                  disabled={syncState === 'syncing'}
+                >
+                  Créer les bases de données
+                </button>
+
+                <div className="divider">ou configurer manuellement</div>
+
+                <div className="db-config">
+                  {Object.entries(dbIds).map(([key, value]) => (
+                    <div key={key} className="config-row">
+                      <label>{key}</label>
+                      <input
+                        type="text"
+                        value={value}
+                        onChange={(e) => setDbIds(prev => ({ ...prev, [key]: e.target.value }))}
+                        placeholder="ID de la base Notion..."
+                      />
+                    </div>
+                  ))}
+                  <button
+                    className="action-button"
+                    onClick={handleConfigure}
+                    disabled={syncState === 'syncing'}
+                  >
+                    Enregistrer la configuration
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="db-status">
+                {Object.entries(status.databases).map(([key, id]) => (
+                  <div key={key} className="db-row">
+                    <span className="db-name">{key}</span>
+                    <span className="db-id">{id ? id.slice(0, 8) + '...' : 'Non configuré'}</span>
+                    <span className={`db-check ${id ? 'ok' : 'missing'}`}>
+                      {id ? 'OK' : '!'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Sync Actions */}
+          {status.configured && (
+            <section className="section">
+              <h2>Synchronisation</h2>
+
+              <div className="sync-actions">
+                <div className="sync-card" onClick={handleSyncFromNotion}>
+                  <div className="sync-icon">&#x21E9;</div>
+                  <div>
+                    <h3>Importer depuis Notion</h3>
+                    <p>Récupère races, classes, sorts et objets depuis vos bases Notion</p>
+                  </div>
+                </div>
+
+                <div className="sync-card" onClick={handlePushCharacters}>
+                  <div className="sync-icon">&#x21E7;</div>
+                  <div>
+                    <h3>Exporter les personnages</h3>
+                    <p>Envoie vos {characters.length} personnage(s) vers Notion pour backup</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress */}
+              {syncState !== 'idle' && (
+                <div className={`sync-feedback ${syncState}`}>
+                  {syncState === 'syncing' && (
+                    <div className="progress-bar">
+                      <div className="progress-fill" style={{ width: `${syncProgress}%` }} />
+                    </div>
+                  )}
+                  <p className="sync-message">{syncMessage}</p>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* How it works */}
+          <section className="section">
+            <h2>Comment ça marche</h2>
+            <div className="info-card">
+              <ol className="how-it-works">
+                <li>Vos données de jeu (races, classes, sorts, objets) vivent dans Notion</li>
+                <li>Vous les éditez directement dans l'interface Notion</li>
+                <li>Cliquez "Importer depuis Notion" pour synchroniser dans l'app</li>
+                <li>Les personnages sont stockés localement et peuvent être sauvegardés sur Notion</li>
+              </ol>
+            </div>
+          </section>
+        </>
+      )}
+    </div>
+  );
+}

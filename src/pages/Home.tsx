@@ -104,6 +104,7 @@ export function Home() {
             {hasData ? 'Données SRD' : 'Importer données'}
           </button>
           <button onClick={() => navigate('/homebrew')}>Règles maison</button>
+          <button onClick={() => navigate('/notion')}>Notion</button>
         </nav>
       </footer>
 
