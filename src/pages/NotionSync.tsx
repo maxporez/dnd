@@ -138,9 +138,11 @@ export function NotionSync() {
   return (
     <div className="notion-sync">
       <header className="notion-header">
-        <button className="back-button" onClick={() => navigate('/')}>
-          &larr; Retour
-        </button>
+        <div className="header-top">
+          <button className="back-button" onClick={() => navigate('/')}>
+            &larr; Retour
+          </button>
+        </div>
         <h1>Notion Back-Office</h1>
         <p className="subtitle">Gérez vos données D&D depuis Notion</p>
       </header>

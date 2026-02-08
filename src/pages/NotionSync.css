@@ -11,7 +11,11 @@
 .notion-header {
   text-align: center;
   padding: 1rem 0;
-  position: relative;
+}
+
+.header-top {
+  text-align: left;
+  margin-bottom: 0.5rem;
 }
 
 .notion-header h1 {
@@ -21,9 +25,6 @@
 }
 
 .back-button {
-  position: absolute;
-  left: 0;
-  top: 1rem;
   background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
