@@ -4,13 +4,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { setupAllDatabases } from '../notion/databases';
-import { getNotionClient } from '../notion/client';
+import { setupAllDatabases } from '../notion/databases.js';
+import { getNotionClient } from '../notion/client.js';
 import {
   raceToNotionProperties,
   classToNotionProperties,
   characterToNotionProperties,
-} from '../notion/mappers';
+} from '../notion/mappers.js';
 
 const SAMPLE_RACES = [
   {
