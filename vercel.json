@@ -1,4 +1,5 @@
 {
+  "buildCommand": "npm run build && npm run build:api",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },
     { "source": "/(.*)", "destination": "/" }
