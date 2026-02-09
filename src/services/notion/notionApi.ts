@@ -39,6 +39,17 @@ export async function getNotionStatus(): Promise<NotionStatus> {
   return apiCall<NotionStatus>('/sync/status');
 }
 
+export async function connectNotion(apiKey: string, pageId: string): Promise<{ connected: boolean; user: string }> {
+  return apiCall('/sync/connect', {
+    method: 'POST',
+    body: JSON.stringify({ apiKey, pageId }),
+  });
+}
+
+export async function disconnectNotion(): Promise<{ success: boolean }> {
+  return apiCall('/sync/disconnect', { method: 'POST' });
+}
+
 export async function setupDatabases(): Promise<{ success: boolean; databases: NotionStatus['databases'] }> {
   return apiCall('/sync/setup', { method: 'POST' });
 }

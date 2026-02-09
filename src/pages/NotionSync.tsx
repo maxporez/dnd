@@ -4,6 +4,8 @@ import {
   getNotionStatus,
   setupDatabases,
   configureDatabases,
+  connectNotion,
+  disconnectNotion,
   type NotionStatus,
 } from '../services/notion/notionApi';
 import {
@@ -32,6 +34,12 @@ export function NotionSync() {
     items: '',
   });
 
+  // Login form state
+  const [apiKey, setApiKey] = useState('');
+  const [pageId, setPageId] = useState('');
+  const [connectLoading, setConnectLoading] = useState(false);
+  const [connectError, setConnectError] = useState('');
+
   const refreshStatus = useCallback(async () => {
     try {
       setLoading(true);
@@ -58,9 +66,35 @@ export function NotionSync() {
     getAllCharacters().then(setCharacters);
   }, [refreshStatus]);
 
+  const handleConnect = async () => {
+    if (!apiKey.trim() || !pageId.trim()) {
+      setConnectError('Veuillez remplir les deux champs');
+      return;
+    }
+
+    setConnectLoading(true);
+    setConnectError('');
+    try {
+      await connectNotion(apiKey.trim(), pageId.trim());
+      setApiKey('');
+      setPageId('');
+      await refreshStatus();
+    } catch (error) {
+      setConnectError(error instanceof Error ? error.message : 'Connexion impossible');
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    await disconnectNotion();
+    setStatus(null);
+    await refreshStatus();
+  };
+
   const handleSetup = async () => {
     setSyncState('syncing');
-    setSyncMessage('Création des bases Notion...');
+    setSyncMessage('Cr\u00e9ation des bases Notion...');
     try {
       const result = await setupDatabases();
       setDbIds({
@@ -71,11 +105,11 @@ export function NotionSync() {
         items: result.databases.items || '',
       });
       setSyncState('success');
-      setSyncMessage('Bases de données créées avec succès !');
+      setSyncMessage('Bases de donn\u00e9es cr\u00e9\u00e9es avec succ\u00e8s !');
       await refreshStatus();
     } catch (error) {
       setSyncState('error');
-      setSyncMessage(error instanceof Error ? error.message : 'Erreur lors de la création');
+      setSyncMessage(error instanceof Error ? error.message : 'Erreur lors de la cr\u00e9ation');
     }
   };
 
@@ -90,7 +124,7 @@ export function NotionSync() {
         setSyncMessage(`Bases invalides: ${invalid.map(([k]) => k).join(', ')}`);
       } else {
         setSyncState('success');
-        setSyncMessage('Configuration enregistrée !');
+        setSyncMessage('Configuration enregistr\u00e9e !');
         await refreshStatus();
       }
     } catch (error) {
@@ -135,6 +169,8 @@ export function NotionSync() {
     return <div className="loading">Vérification de la connexion Notion...</div>;
   }
 
+  const isConnected = status?.connected;
+
   return (
     <div className="notion-sync">
       <header className="notion-header">
@@ -145,28 +181,79 @@ export function NotionSync() {
         <p className="subtitle">Gérez vos données D&D depuis Notion</p>
       </header>
 
-      {/* Connection Status */}
-      <section className="section">
-        <h2>Connexion</h2>
-        <div className={`status-card ${status?.connected ? 'connected' : 'disconnected'}`}>
-          <div className="status-indicator" />
-          <div>
-            <p className="status-text">
-              {status?.connected
-                ? `Connecté en tant que ${status.user}`
-                : status?.error || 'Serveur non disponible'}
+      {!isConnected ? (
+        /* ===== LOGIN FORM ===== */
+        <section className="section">
+          <div className="login-card">
+            <div className="login-icon">N</div>
+            <h2 className="login-title">Connexion à Notion</h2>
+            <p className="login-description">
+              Entrez votre clé API d'intégration et l'ID de la page parente pour connecter votre workspace Notion.
             </p>
-            {!status?.connected && (
-              <p className="status-hint">
-                Lancez le serveur avec <code>npm run dev</code> et configurez .env
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
 
-      {status?.connected && (
+            <div className="login-form">
+              <div className="login-field">
+                <label htmlFor="api-key">Clé API Notion</label>
+                <input
+                  id="api-key"
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="ntn_xxxxxxxxxxxxx..."
+                  disabled={connectLoading}
+                />
+                <span className="field-hint">
+                  Depuis <a href="https://www.notion.so/my-integrations" target="_blank" rel="noopener noreferrer">notion.so/my-integrations</a>
+                </span>
+              </div>
+
+              <div className="login-field">
+                <label htmlFor="page-id">ID de la page parente</label>
+                <input
+                  id="page-id"
+                  type="text"
+                  value={pageId}
+                  onChange={(e) => setPageId(e.target.value)}
+                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                  disabled={connectLoading}
+                />
+                <span className="field-hint">
+                  L'ID se trouve dans l'URL de votre page Notion
+                </span>
+              </div>
+
+              {connectError && (
+                <div className="login-error">{connectError}</div>
+              )}
+
+              <button
+                className="action-button primary login-button"
+                onClick={handleConnect}
+                disabled={connectLoading || !apiKey.trim() || !pageId.trim()}
+              >
+                {connectLoading ? 'Connexion...' : 'Se connecter'}
+              </button>
+            </div>
+          </div>
+        </section>
+      ) : (
         <>
+          {/* ===== CONNECTED STATE ===== */}
+          <section className="section">
+            <h2>Connexion</h2>
+            <div className="status-card connected">
+              <div className="status-indicator" />
+              <div className="status-info">
+                <p className="status-text">
+                  Connecté en tant que {status.user}
+                </p>
+              </div>
+              <button className="disconnect-button" onClick={handleDisconnect}>
+                Déconnexion
+              </button>
+            </div>
+          </section>
+
           {/* Database Setup */}
           <section className="section">
             <h2>Bases de données Notion</h2>
