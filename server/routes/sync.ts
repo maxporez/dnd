@@ -2,7 +2,7 @@
 // Handles database creation, configuration, and status checks
 
 import { Router } from 'express';
-import { getNotionClient } from '../notion/client.js';
+import { getNotionClient, hasCredentials, setCredentials, clearCredentials } from '../notion/client.js';
 import {
   setupAllDatabases,
   getDatabaseIds,
@@ -15,6 +15,15 @@ export const syncRouter = Router();
 // Check connection status and database config
 syncRouter.get('/status', async (_req, res) => {
   try {
+    if (!hasCredentials()) {
+      return res.json({
+        connected: false,
+        error: 'Aucune clé API configurée',
+        databases: getDatabaseIds(),
+        configured: false,
+      });
+    }
+
     const notion = getNotionClient();
 
     // Test the connection
@@ -37,6 +46,40 @@ syncRouter.get('/status', async (_req, res) => {
       configured: false,
     });
   }
+});
+
+// Connect with API key and page ID
+syncRouter.post('/connect', async (req, res) => {
+  try {
+    const { apiKey, pageId } = req.body as { apiKey: string; pageId: string };
+
+    if (!apiKey || !pageId) {
+      return res.status(400).json({ error: 'API key et Page ID requis' });
+    }
+
+    // Set the credentials
+    setCredentials(apiKey, pageId);
+
+    // Test the connection
+    const notion = getNotionClient();
+    const user = await notion.users.me({});
+
+    res.json({
+      connected: true,
+      user: user.name || 'Unknown',
+    });
+  } catch (error) {
+    // Clear bad credentials
+    clearCredentials();
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(401).json({ error: `Connexion échouée : ${message}` });
+  }
+});
+
+// Disconnect
+syncRouter.post('/disconnect', (_req, res) => {
+  clearCredentials();
+  res.json({ success: true });
 });
 
 // Setup: create all Notion databases
