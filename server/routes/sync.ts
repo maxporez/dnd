@@ -15,12 +15,20 @@ export const syncRouter = Router();
 // Check connection status and database config
 syncRouter.get('/status', async (_req, res) => {
   try {
+    // Provide env var hints for pre-filling the login form
+    const envApiKey = process.env.NOTION_API_KEY || '';
+    const envPageId = process.env.NOTION_PARENT_PAGE_ID || '';
+
     if (!hasCredentials()) {
       return res.json({
         connected: false,
         error: 'Aucune clé API configurée',
         databases: getDatabaseIds(),
         configured: false,
+        envHints: {
+          apiKey: envApiKey,
+          pageId: envPageId,
+        },
       });
     }
 

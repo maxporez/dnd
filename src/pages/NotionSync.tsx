@@ -54,6 +54,11 @@ export function NotionSync() {
           items: s.databases.items || '',
         });
       }
+      // Pre-fill login form with env var hints
+      if (s.envHints) {
+        if (s.envHints.apiKey) setApiKey(s.envHints.apiKey);
+        if (s.envHints.pageId) setPageId(s.envHints.pageId);
+      }
     } catch {
       setStatus(null);
     } finally {
