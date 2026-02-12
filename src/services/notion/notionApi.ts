@@ -33,6 +33,10 @@ export interface NotionStatus {
     items?: string;
   };
   configured: boolean;
+  envHints?: {
+    apiKey: string;
+    pageId: string;
+  };
 }
 
 export async function getNotionStatus(): Promise<NotionStatus> {
