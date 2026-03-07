@@ -38,9 +38,24 @@ a {
 
 // Utility classes
 .page-container {
-  max-width: 800px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 16px;
+}
+
+// Material icon font fallback (filled by default)
+.material-icons {
+  font-family: 'Material Icons', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
 }
 
 .loading-container {
