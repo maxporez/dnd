@@ -384,7 +384,8 @@ export class DataImportService {
 
   async importHerbs(): Promise<number> {
     const herbsModule = await import('../../data/herbs.json');
-    const herbs = (herbsModule.default?.herbs || []) as HerbData[];
+    const raw = herbsModule.default;
+    const herbs = (Array.isArray(raw) ? raw : (raw as any)?.herbs ?? []) as HerbData[];
     if (herbs.length === 0) return 0;
 
     const gameItems = herbs.map(herb => this.herbToGameItem(herb));

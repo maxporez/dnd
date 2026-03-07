@@ -16,6 +16,10 @@ export interface NotionStatus {
     items?: string;
   };
   configured: boolean;
+  envHints?: {
+    apiKey?: string;
+    pageId?: string;
+  };
 }
 
 export interface NotionRaceData {
@@ -100,5 +104,13 @@ export class NotionApiService {
     } catch {
       return null;
     }
+  }
+
+  async connect(apiKey: string, pageId: string): Promise<{ connected: boolean; user: string }> {
+    return firstValueFrom(this.http.post<{ connected: boolean; user: string }>(`${API_BASE}/sync/connect`, { apiKey, pageId }));
+  }
+
+  async disconnect(): Promise<{ success: boolean }> {
+    return firstValueFrom(this.http.post<{ success: boolean }>(`${API_BASE}/sync/disconnect`, {}));
   }
 }

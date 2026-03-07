@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "angular-dev",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["ng", "serve"],
+      "runtimeExecutable": "/c/Program Files/nodejs/npm",
+      "runtimeArgs": ["run", "dev:front"],
       "port": 4200
     }
   ]

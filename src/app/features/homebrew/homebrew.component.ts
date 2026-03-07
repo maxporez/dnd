@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -35,6 +36,7 @@ import { BackButtonComponent } from '../../shared/components/back-button/back-bu
     MatSnackBarModule,
     MatTooltipModule,
     BackButtonComponent,
+    UpperCasePipe,
   ],
   templateUrl: './homebrew.component.html',
   styleUrl: './homebrew.component.scss',

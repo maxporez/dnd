@@ -1,16 +1,12 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { CharacterService } from '../services/character.service';
 import { ModifierEngineService } from '../services/modifier-engine.service';
-import { GameDataService } from '../services/game-data.service';
-import { HomebrewService } from '../services/homebrew.service';
 import type { Character, ComputedCharacter } from '../../models/character.model';
 
 @Injectable({ providedIn: 'root' })
 export class CharacterState {
   private characterService = inject(CharacterService);
   private modifierEngine = inject(ModifierEngineService);
-  private gameDataService = inject(GameDataService);
-  private homebrewService = inject(HomebrewService);
 
   // --- Signals ---
 
@@ -158,14 +154,6 @@ export class CharacterState {
   // --- Internal ---
 
   private async computeCharacter(character: Character): Promise<ComputedCharacter> {
-    const [races, classes, homebrewRules] = await Promise.all([
-      this.gameDataService.getAllRaces(),
-      this.gameDataService.getAllClasses(),
-      this.homebrewService.getEnabledRules(),
-    ]);
-
-    return this.modifierEngine.computeCharacterStats(
-      character, races, classes, homebrewRules,
-    );
+    return this.modifierEngine.computeCharacterStats(character);
   }
 }
