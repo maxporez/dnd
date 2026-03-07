@@ -1,0 +1,201 @@
+import type { AbilityScores, SkillProficiencies, SavingThrowProficiencies, DerivedStats } from './stats.model';
+import type { Modifier } from './rules.model';
+
+export interface ClassLevel {
+  classId: string;
+  className: string;
+  subclassId?: string;
+  subclassName?: string;
+  level: number;
+  isHomebrew: boolean;
+}
+
+export interface RaceRef {
+  raceId: string;
+  raceName: string;
+  subraceId?: string;
+  subraceName?: string;
+  isHomebrew: boolean;
+}
+
+export interface BackgroundRef {
+  backgroundId: string;
+  backgroundName: string;
+  isHomebrew: boolean;
+}
+
+export interface FeatRef {
+  featId: string;
+  featName: string;
+  isHomebrew: boolean;
+}
+
+export interface InventoryItem {
+  id: string;
+  itemId: string;
+  name: string;
+  quantity: number;
+  equipped: boolean;
+  attuned: boolean;
+  notes?: string;
+  isHomebrew: boolean;
+}
+
+export interface SpellEntry {
+  spellId: string;
+  name: string;
+  level: number;
+  prepared: boolean;
+  alwaysPrepared: boolean;
+  source: string;
+  isHomebrew: boolean;
+}
+
+export interface SpellSlots {
+  [level: number]: {
+    max: number;
+    used: number;
+  };
+}
+
+export interface Feature {
+  id: string;
+  name: string;
+  description: string;
+  source: string;
+  sourceId: string;
+  level?: number;
+  uses?: {
+    max: number | string;
+    current: number;
+    rechargeOn: 'shortRest' | 'longRest' | 'dawn' | 'never';
+  };
+  isHomebrew: boolean;
+}
+
+export interface Attack {
+  id: string;
+  name: string;
+  type: 'melee' | 'ranged' | 'spell';
+  ability: string;
+  proficient: boolean;
+  damageType: string;
+  damageDice: string;
+  bonusToHit?: number;
+  bonusDamage?: number;
+  range?: string;
+  properties?: string[];
+  notes?: string;
+}
+
+export interface Currency {
+  copper: number;
+  silver: number;
+  electrum: number;
+  gold: number;
+  platinum: number;
+}
+
+export interface CharacterNotes {
+  personality: string;
+  ideals: string;
+  bonds: string;
+  flaws: string;
+  backstory: string;
+  allies: string;
+  treasure: string;
+  other: string;
+}
+
+export interface Character {
+  id: string;
+  name: string;
+  playerName?: string;
+  race: RaceRef;
+  classes: ClassLevel[];
+  background: BackgroundRef;
+  alignment?: string;
+  experience?: number;
+  appearance: {
+    age?: string;
+    height?: string;
+    weight?: string;
+    eyes?: string;
+    skin?: string;
+    hair?: string;
+    portrait?: string;
+  };
+  baseAbilityScores: AbilityScores;
+  skillProficiencies: SkillProficiencies;
+  savingThrowProficiencies: SavingThrowProficiencies;
+  otherProficiencies: string[];
+  feats: FeatRef[];
+  features: Feature[];
+  inventory: InventoryItem[];
+  currency: Currency;
+  spellcastingAbility?: string;
+  spells: SpellEntry[];
+  spellSlots: SpellSlots;
+  attacks: Attack[];
+  currentState: {
+    hitPoints: number;
+    tempHitPoints: number;
+    hitDiceRemaining: { [dieType: string]: number };
+    deathSaves: { successes: number; failures: number };
+    exhaustionLevel: number;
+    conditions: string[];
+    inspiration: boolean;
+  };
+  notes: CharacterNotes;
+  activeModifiers: Modifier[];
+  activeHomebrewRules: string[];
+  createdAt: string;
+  updatedAt: string;
+  version: number;
+}
+
+export interface ComputedCharacter extends Character {
+  computedAbilityScores: AbilityScores;
+  abilityModifiers: AbilityScores;
+  derivedStats: DerivedStats;
+  computedSkillBonuses: { [skill: string]: number };
+  computedSaveBonuses: { [ability: string]: number };
+}
+
+export function createEmptyCharacter(): Omit<Character, 'id' | 'createdAt' | 'updatedAt' | 'version'> {
+  return {
+    name: '',
+    race: { raceId: '', raceName: '', isHomebrew: false },
+    classes: [],
+    background: { backgroundId: '', backgroundName: '', isHomebrew: false },
+    appearance: {},
+    baseAbilityScores: {
+      strength: 10, dexterity: 10, constitution: 10,
+      intelligence: 10, wisdom: 10, charisma: 10,
+    },
+    skillProficiencies: {},
+    savingThrowProficiencies: {
+      strength: false, dexterity: false, constitution: false,
+      intelligence: false, wisdom: false, charisma: false,
+    },
+    otherProficiencies: [],
+    feats: [],
+    features: [],
+    inventory: [],
+    currency: { copper: 0, silver: 0, electrum: 0, gold: 0, platinum: 0 },
+    spells: [],
+    spellSlots: {},
+    attacks: [],
+    currentState: {
+      hitPoints: 0, tempHitPoints: 0, hitDiceRemaining: {},
+      deathSaves: { successes: 0, failures: 0 },
+      exhaustionLevel: 0, conditions: [], inspiration: false,
+    },
+    notes: {
+      personality: '', ideals: '', bonds: '', flaws: '',
+      backstory: '', allies: '', treasure: '', other: '',
+    },
+    activeModifiers: [],
+    activeHomebrewRules: [],
+  };
+}

@@ -11,6 +11,7 @@ const app = express();
 // We keep localhost origins for local dev and allow *.vercel.app for
 // preview deployments.
 const allowedOrigins: string[] = [
+  'http://localhost:4200',
   'http://localhost:5173',
   'http://localhost:4173',
 ];
