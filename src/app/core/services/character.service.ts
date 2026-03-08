@@ -1,12 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { DatabaseService } from './database.service';
+import { SupabaseSyncService } from './supabase-sync.service';
 import { createEmptyCharacter } from '../../models/character.model';
 import type { Character } from '../../models/character.model';
 
 @Injectable({ providedIn: 'root' })
 export class CharacterService {
   private db = inject(DatabaseService);
+  private supabaseSync = inject(SupabaseSyncService);
 
   async createCharacter(data: Partial<Omit<Character, 'id' | 'createdAt' | 'updatedAt' | 'version'>> = {}): Promise<Character> {
     const now = new Date().toISOString();
@@ -19,6 +21,7 @@ export class CharacterService {
       version: 1,
     };
     await this.db.characters.add(character);
+    this.supabaseSync.pushCharacterBackground(character);
     return character;
   }
 
@@ -41,6 +44,7 @@ export class CharacterService {
       version: character.version + 1,
     };
     await this.db.characters.put(updated);
+    this.supabaseSync.pushCharacterBackground(updated);
     return updated;
   }
 
@@ -48,6 +52,7 @@ export class CharacterService {
     const character = await this.db.characters.get(id);
     if (!character) return false;
     await this.db.characters.delete(id);
+    this.supabaseSync.deleteCharacterBackground(id);
     return true;
   }
 
@@ -65,6 +70,7 @@ export class CharacterService {
       version: 1,
     };
     await this.db.characters.add(duplicate);
+    this.supabaseSync.pushCharacterBackground(duplicate);
     return duplicate;
   }
 
@@ -83,6 +89,7 @@ export class CharacterService {
       version: 1,
     };
     await this.db.characters.add(character);
+    this.supabaseSync.pushCharacterBackground(character);
     return character;
   }
 

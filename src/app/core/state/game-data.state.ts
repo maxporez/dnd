@@ -2,12 +2,14 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { GameDataService } from '../services/game-data.service';
 import { DataImportService } from '../services/data-import.service';
 import { DatabaseService } from '../services/database.service';
+import { SupabaseSyncService } from '../services/supabase-sync.service';
 import type { GameRace, GameClass, GameSpell, GameItem, DataImportStatus } from '../../models/game-data.model';
 
 @Injectable({ providedIn: 'root' })
 export class GameDataState {
   private gameDataService = inject(GameDataService);
   private dataImportService = inject(DataImportService);
+  private supabaseSync = inject(SupabaseSyncService);
   private db = inject(DatabaseService);
 
   // --- Signals ---
@@ -47,6 +49,9 @@ export class GameDataState {
     this.isLoading.set(true);
     this.error.set(null);
     try {
+      // Si l'IDB local est vide, tente de charger depuis Supabase
+      await this.supabaseSync.loadGameDataIfEmpty();
+
       const [races, classes, spells, items, status] = await Promise.all([
         this.gameDataService.getAllRaces(),
         this.gameDataService.getAllClasses(),

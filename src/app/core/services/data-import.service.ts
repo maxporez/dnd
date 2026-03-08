@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { SupabaseSyncService } from './supabase-sync.service';
 import { DatabaseService } from './database.service';
 import type { GameRace, GameClass, GameSpell, GameItem, DataImportStatus } from '../../models/game-data.model';
 
@@ -108,6 +109,7 @@ export const HERB_SEASONS = Object.entries(HERB_SEASON_LABELS).map(([id, name]) 
 @Injectable({ providedIn: 'root' })
 export class DataImportService {
   private db = inject(DatabaseService);
+  private supabaseSync = inject(SupabaseSyncService);
 
   // --- Fetch with retry ---
 
@@ -376,6 +378,14 @@ export class DataImportService {
     };
 
     await this.db.dataStatus.put(status);
+
+    // Sync vers Supabase en arrière-plan (ne bloque pas l'UI)
+    this.supabaseSync.pushGameDataToSupabase(
+      races, classes, spells, items, status,
+      (msg) => onProgress(msg, 97),
+    ).then(() => onProgress('Sync cloud terminée !', 100))
+      .catch(() => onProgress('Import terminé (sync cloud échouée)', 100));
+
     onProgress('Import terminé !', 100);
     return status;
   }
