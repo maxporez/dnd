@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { CharacterService } from '../services/character.service';
 import { SupabaseSyncService } from '../services/supabase-sync.service';
 import { ModifierEngineService } from '../services/modifier-engine.service';
+import { AuthService } from '../services/auth.service';
 import type { Character, ComputedCharacter } from '../../models/character.model';
 
 @Injectable({ providedIn: 'root' })
@@ -9,6 +10,7 @@ export class CharacterState {
   private characterService = inject(CharacterService);
   private modifierEngine = inject(ModifierEngineService);
   private supabaseSync = inject(SupabaseSyncService);
+  private auth = inject(AuthService);
 
   // --- Signals ---
 
@@ -30,7 +32,8 @@ export class CharacterState {
     this.error.set(null);
     try {
       // Sync bidirectionnel avec Supabase en arrière-plan au démarrage
-      this.supabaseSync.syncCharactersOnStartup().then(async () => {
+      const userId = this.auth.currentUser()?.id;
+      this.supabaseSync.syncCharactersOnStartup(userId).then(async () => {
         const chars = await this.characterService.getAllCharacters();
         this.characters.set(chars);
       }).catch(console.warn);

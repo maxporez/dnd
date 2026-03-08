@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule, MatTooltipModule],
   template: `
     <mat-toolbar color="primary" class="app-toolbar">
       <a routerLink="/" class="app-title">
@@ -16,20 +18,30 @@ import { MatIconModule } from '@angular/material/icon';
 
       <span class="spacer"></span>
 
-      <nav class="nav-links">
-        <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <mat-icon>people</mat-icon>
-          <span class="nav-label">Personnages</span>
-        </a>
-        <a mat-button routerLink="/homebrew" routerLinkActive="active">
-          <mat-icon>build</mat-icon>
-          <span class="nav-label">Homebrew</span>
-        </a>
-        <a mat-button routerLink="/notion" routerLinkActive="active">
-          <mat-icon>sync</mat-icon>
-          <span class="nav-label">Notion</span>
-        </a>
-      </nav>
+      @if (auth.isAuthenticated()) {
+        <nav class="nav-links">
+          <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <mat-icon>people</mat-icon>
+            <span class="nav-label">Personnages</span>
+          </a>
+          <a mat-button routerLink="/homebrew" routerLinkActive="active">
+            <mat-icon>build</mat-icon>
+            <span class="nav-label">Homebrew</span>
+          </a>
+          <a mat-button routerLink="/notion" routerLinkActive="active">
+            <mat-icon>sync</mat-icon>
+            <span class="nav-label">Notion</span>
+          </a>
+        </nav>
+
+        <span class="user-email nav-label" [matTooltip]="auth.currentUser()?.email ?? ''">
+          {{ auth.currentUser()?.email }}
+        </span>
+
+        <button mat-icon-button (click)="auth.signOut()" matTooltip="Se déconnecter">
+          <mat-icon>logout</mat-icon>
+        </button>
+      }
     </mat-toolbar>
 
     <main class="app-content">
@@ -83,6 +95,16 @@ import { MatIconModule } from '@angular/material/icon';
       flex: 1;
     }
 
+    .user-email {
+      font-size: 13px;
+      opacity: 0.85;
+      margin: 0 4px 0 12px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     @media (max-width: 600px) {
       .nav-label {
         display: none;
@@ -90,4 +112,6 @@ import { MatIconModule } from '@angular/material/icon';
     }
   `,
 })
-export class App {}
+export class App {
+  readonly auth = inject(AuthService);
+}

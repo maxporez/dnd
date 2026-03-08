@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "angular-dev",
-      "runtimeExecutable": "/c/Program Files/nodejs/npm",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\npm.cmd",
       "runtimeArgs": ["run", "dev:front"],
       "port": 4200
     }
