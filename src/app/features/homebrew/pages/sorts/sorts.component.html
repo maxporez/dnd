@@ -1,0 +1,110 @@
+<div class="page-container sorts-page">
+  <app-back-button />
+
+  <header class="page-header">
+    <div class="header-top">
+      <h1>
+        <mat-icon>auto_fix_high</mat-icon>
+        Sorts
+        <span class="count-badge">{{ filteredSpells().length }}</span>
+      </h1>
+      <button mat-flat-button color="primary" (click)="openSpellEditor()">
+        <mat-icon>add</mat-icon>
+        Nouveau sort
+      </button>
+    </div>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [value]="searchQuery()"
+        (input)="onSearchChange($any($event.target).value)"
+        placeholder="Nom, école, classe..."
+      />
+      @if (searchQuery()) {
+        <button matSuffix mat-icon-button (click)="onSearchChange('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </header>
+
+  <div class="filter-bar">
+    <div class="filter-row">
+      <span class="filter-label">École :</span>
+      <div class="filter-chips">
+        @for (school of schools; track school.id) {
+          <button
+            class="filter-chip"
+            [class.active]="schoolFilter() === school.id"
+            (click)="toggleSchool(school.id)"
+          >{{ school.label }}</button>
+        }
+      </div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Niveau :</span>
+      <div class="filter-chips">
+        @for (lvl of levels; track lvl.id) {
+          <button
+            class="filter-chip"
+            [class.active]="levelFilter() === lvl.id"
+            (click)="toggleLevel(lvl.id)"
+          >{{ lvl.label }}</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-icon class="spinner">hourglass_empty</mat-icon>
+      <span>Chargement...</span>
+    </div>
+  } @else if (filteredSpells().length === 0) {
+    <div class="empty-state">
+      <mat-icon>auto_fix_high</mat-icon>
+      <p>Aucun sort trouvé</p>
+    </div>
+  } @else {
+    <div class="card-grid">
+      @for (spell of filteredSpells(); track spell.id) {
+        <mat-card class="data-card" (click)="openSpellEditor(spell)">
+          <mat-card-header>
+            <mat-card-title>{{ spell.name }}</mat-card-title>
+            <span class="source-badge">{{ spell.source }}</span>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="card-details">
+              <span class="detail-chip level-chip">
+                <mat-icon>layers</mat-icon>
+                {{ getSpellLevelLabel(spell.level) }}
+              </span>
+              <span class="detail-chip school-chip">
+                {{ getSchoolLabel(spell.school) }}
+              </span>
+            </div>
+            <div class="card-details">
+              <span class="detail-chip">
+                <mat-icon>schedule</mat-icon>
+                {{ spell.castingTime }}
+              </span>
+              <span class="detail-chip">
+                <mat-icon>straighten</mat-icon>
+                {{ spell.range }}
+              </span>
+            </div>
+            <p class="card-subtitle">
+              @if (spell.components.verbal) {V}
+              @if (spell.components.somatic) { S}
+              @if (spell.components.material) { M}
+              &mdash; {{ spell.duration }}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

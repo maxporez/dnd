@@ -1,0 +1,126 @@
+<div class="page-container objets-page">
+  <app-back-button />
+
+  <header class="page-header">
+    <div class="header-top">
+      <h1>
+        <mat-icon>inventory_2</mat-icon>
+        Objets & Herbes
+        <span class="count-badge">{{ filteredItems().length }}</span>
+      </h1>
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="openItemEditor()">
+          <mat-icon>add</mat-icon>
+          Nouvel objet
+        </button>
+        <button mat-stroked-button (click)="importHerbs()" [disabled]="isImportingHerbs()">
+          <mat-icon>eco</mat-icon>
+          @if (isImportingHerbs()) {
+            Import en cours...
+          } @else {
+            Importer herbes AideDD
+          }
+        </button>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [value]="searchQuery()"
+        (input)="onSearchChange($any($event.target).value)"
+        placeholder="Nom, catégorie, source..."
+      />
+      @if (searchQuery()) {
+        <button matSuffix mat-icon-button (click)="onSearchChange('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </header>
+
+  <div class="filter-bar">
+    <div class="filter-row">
+      <span class="filter-label">Catégorie :</span>
+      <div class="filter-chips">
+        @for (cat of itemCategories; track cat.id) {
+          <button
+            class="filter-chip"
+            [class.active]="categoryFilter() === cat.id"
+            (click)="toggleCategory(cat.id)"
+          >{{ cat.label }}</button>
+        }
+      </div>
+    </div>
+    <div class="filter-row">
+      <span class="filter-label">Rareté :</span>
+      <div class="filter-chips">
+        @for (r of itemRarities; track r.id) {
+          <button
+            class="filter-chip rarity-filter-chip"
+            [class.active]="rarityFilter() === r.id"
+            [attr.data-rarity]="r.id || 'common'"
+            (click)="toggleRarity(r.id)"
+          >{{ r.label }}</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-icon class="spinner">hourglass_empty</mat-icon>
+      <span>Chargement...</span>
+    </div>
+  } @else if (filteredItems().length === 0) {
+    <div class="empty-state">
+      <mat-icon>inventory_2</mat-icon>
+      <p>Aucun objet trouvé</p>
+    </div>
+  } @else {
+    <div class="card-grid">
+      @for (item of filteredItems(); track item.id) {
+        <mat-card class="data-card" (click)="openItemEditor(item)">
+          <mat-card-header>
+            <mat-card-title>{{ item.name }}</mat-card-title>
+            <span class="source-badge">{{ item.source }}</span>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="card-details">
+              <span class="detail-chip category-chip">
+                {{ getCategoryLabel(item.category) }}
+              </span>
+              @if (item.rarity) {
+                <span class="detail-chip rarity-chip" [attr.data-rarity]="item.rarity">
+                  {{ item.rarity }}
+                </span>
+              }
+            </div>
+            <div class="card-details">
+              @if (item.damage) {
+                <span class="detail-chip">
+                  <mat-icon>gavel</mat-icon>
+                  {{ item.damage.dice }} {{ item.damage.type }}
+                </span>
+              }
+              @if (item.armorClass) {
+                <span class="detail-chip">
+                  <mat-icon>shield</mat-icon>
+                  CA {{ item.armorClass.base }}
+                </span>
+              }
+              @if (item.weight) {
+                <span class="detail-chip">
+                  <mat-icon>fitness_center</mat-icon>
+                  {{ item.weight }} lb
+                </span>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>
