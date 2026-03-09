@@ -1,0 +1,77 @@
+@use '../game-data-shared' as shared;
+
+.sorts-page {
+  max-width: 1200px;
+  padding-bottom: 32px;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0;
+
+    mat-icon {
+      font-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
+  }
+}
+
+.count-badge {
+  font-size: 14px;
+  font-weight: 400;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+@include shared.filter-bar;
+@include shared.card-grid;
+@include shared.data-card;
+@include shared.source-badge;
+@include shared.detail-chip;
+@include shared.card-subtitle;
+@include shared.loading-container;
+@include shared.empty-state;
+
+@media (max-width: 600px) {
+  .sorts-page {
+    padding: 8px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-top h1 {
+    font-size: 20px;
+  }
+
+  .search-field {
+    max-width: 100%;
+  }
+}

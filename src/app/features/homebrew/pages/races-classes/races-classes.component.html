@@ -1,0 +1,144 @@
+<div class="page-container races-classes-page">
+  <app-back-button />
+
+  <header class="page-header">
+    <h1>Races & Classes</h1>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [value]="searchQuery()"
+        (input)="onSearchChange($any($event.target).value)"
+        placeholder="Filtrer par nom, source..."
+      />
+      @if (searchQuery()) {
+        <button matSuffix mat-icon-button (click)="onSearchChange('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </header>
+
+  <!-- Section Races -->
+  <section class="data-section">
+    <div class="section-header">
+      <h2>
+        <mat-icon>groups</mat-icon>
+        Races
+        <span class="count-badge">{{ filteredRaces().length }}</span>
+      </h2>
+      <button mat-flat-button color="primary" (click)="openRaceEditor()">
+        <mat-icon>add</mat-icon>
+        Nouvelle race
+      </button>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-icon class="spinner">hourglass_empty</mat-icon>
+        <span>Chargement...</span>
+      </div>
+    } @else if (filteredRaces().length === 0) {
+      <div class="empty-state">
+        <mat-icon>groups</mat-icon>
+        <p>Aucune race trouvée</p>
+      </div>
+    } @else {
+      <div class="card-grid">
+        @for (race of filteredRaces(); track race.id) {
+          <mat-card class="data-card" (click)="openRaceEditor(race)">
+            <mat-card-header>
+              <mat-card-title>{{ race.name }}</mat-card-title>
+              <span class="source-badge">{{ race.source }}</span>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="card-details">
+                <span class="detail-chip">
+                  <mat-icon>directions_walk</mat-icon>
+                  {{ race.speed }} ft
+                </span>
+                <span class="detail-chip">
+                  <mat-icon>straighten</mat-icon>
+                  {{ race.size }}
+                </span>
+                @if (race.darkvision) {
+                  <span class="detail-chip">
+                    <mat-icon>visibility</mat-icon>
+                    {{ race.darkvision }} ft
+                  </span>
+                }
+              </div>
+              @if (race.abilityBonuses.length > 0) {
+                <p class="card-subtitle">{{ getAbilityBonusSummary(race.abilityBonuses) }}</p>
+              }
+              @if (race.traits.length > 0) {
+                <p class="card-traits">{{ race.traits.slice(0, 3).join(', ') }}@if (race.traits.length > 3) {, ...}</p>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- Section Classes -->
+  <section class="data-section">
+    <div class="section-header">
+      <h2>
+        <mat-icon>shield</mat-icon>
+        Classes
+        <span class="count-badge">{{ filteredClasses().length }}</span>
+      </h2>
+      <button mat-flat-button color="primary" (click)="openClassEditor()">
+        <mat-icon>add</mat-icon>
+        Nouvelle classe
+      </button>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-icon class="spinner">hourglass_empty</mat-icon>
+        <span>Chargement...</span>
+      </div>
+    } @else if (filteredClasses().length === 0) {
+      <div class="empty-state">
+        <mat-icon>shield</mat-icon>
+        <p>Aucune classe trouvée</p>
+      </div>
+    } @else {
+      <div class="card-grid">
+        @for (cls of filteredClasses(); track cls.id) {
+          <mat-card class="data-card" (click)="openClassEditor(cls)">
+            <mat-card-header>
+              <mat-card-title>{{ cls.name }}</mat-card-title>
+              <span class="source-badge">{{ cls.source }}</span>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="card-details">
+                <span class="detail-chip">
+                  <mat-icon>casino</mat-icon>
+                  d{{ cls.hitDie }}
+                </span>
+                @if (cls.spellcasting) {
+                  <span class="detail-chip">
+                    <mat-icon>auto_fix_high</mat-icon>
+                    {{ cls.spellcasting.ability | uppercase }}
+                  </span>
+                }
+              </div>
+              @if (cls.savingThrows.length > 0) {
+                <p class="card-subtitle">Sauvegardes : {{ cls.savingThrows.join(', ') | uppercase }}</p>
+              }
+              @if (cls.armorProficiencies.length > 0) {
+                <p class="card-traits">Armures : {{ cls.armorProficiencies.join(', ') }}</p>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </section>
+</div>

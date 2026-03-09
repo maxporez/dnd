@@ -1,327 +1,55 @@
-<div class="page-container homebrew-page">
+<div class="page-container homebrew-hub">
   <app-back-button />
 
   <header class="page-header">
-    <h1>Donnees de jeu</h1>
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Rechercher...</mat-label>
-      <mat-icon matPrefix>search</mat-icon>
-      <input
-        matInput
-        [value]="searchQuery()"
-        (input)="onSearchChange($any($event.target).value)"
-        placeholder="Filtrer par nom, source..."
-      />
-      @if (searchQuery()) {
-        <button matSuffix mat-icon-button (click)="onSearchChange('')">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-    </mat-form-field>
+    <h1>Données de jeu</h1>
+    <p class="page-subtitle">Gérez vos races, classes, sorts et objets homebrew</p>
   </header>
 
-  <mat-tab-group animationDuration="200ms" dynamicHeight>
-    <!-- Races Tab -->
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon>groups</mat-icon>
-        <span class="tab-label">Races ({{ filteredRaces().length }})</span>
-      </ng-template>
-
-      <div class="tab-content">
-        <div class="tab-actions">
-          <button mat-flat-button color="primary" (click)="openRaceEditor()">
-            <mat-icon>add</mat-icon>
-            Nouveau
-          </button>
-        </div>
-
-        @if (isLoading()) {
-          <div class="loading-container">
-            <mat-icon class="spinner">hourglass_empty</mat-icon>
-            <span>Chargement...</span>
-          </div>
-        } @else if (filteredRaces().length === 0) {
-          <div class="empty-state">
+  <div class="hub-grid">
+    <a routerLink="races-classes" class="hub-card">
+      <mat-card>
+        <mat-card-content>
+          <div class="hub-icon races-icon">
             <mat-icon>groups</mat-icon>
-            <p>Aucune race trouvee</p>
           </div>
-        } @else {
-          <div class="card-grid">
-            @for (race of filteredRaces(); track race.id) {
-              <mat-card class="data-card" (click)="openRaceEditor(race)">
-                <mat-card-header>
-                  <mat-card-title>{{ race.name }}</mat-card-title>
-                  <span class="source-badge">{{ race.source }}</span>
-                </mat-card-header>
-                <mat-card-content>
-                  <div class="card-details">
-                    <span class="detail-chip">
-                      <mat-icon>directions_walk</mat-icon>
-                      {{ race.speed }} ft
-                    </span>
-                    <span class="detail-chip">
-                      <mat-icon>straighten</mat-icon>
-                      {{ race.size }}
-                    </span>
-                    @if (race.darkvision) {
-                      <span class="detail-chip">
-                        <mat-icon>visibility</mat-icon>
-                        {{ race.darkvision }} ft
-                      </span>
-                    }
-                  </div>
-                  @if (race.abilityBonuses.length > 0) {
-                    <p class="card-subtitle">{{ getAbilityBonusSummary(race.abilityBonuses) }}</p>
-                  }
-                  @if (race.traits.length > 0) {
-                    <p class="card-traits">{{ race.traits.slice(0, 3).join(', ') }}@if (race.traits.length > 3) {, ...}</p>
-                  }
-                </mat-card-content>
-              </mat-card>
-            }
+          <div class="hub-info">
+            <h2>Races & Classes</h2>
+            <p>{{ races().length }} races · {{ classes().length }} classes</p>
           </div>
-        }
-      </div>
-    </mat-tab>
+          <mat-icon class="hub-arrow">chevron_right</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </a>
 
-    <!-- Classes Tab -->
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon>shield</mat-icon>
-        <span class="tab-label">Classes ({{ filteredClasses().length }})</span>
-      </ng-template>
-
-      <div class="tab-content">
-        <div class="tab-actions">
-          <button mat-flat-button color="primary" (click)="openClassEditor()">
-            <mat-icon>add</mat-icon>
-            Nouveau
-          </button>
-        </div>
-
-        @if (isLoading()) {
-          <div class="loading-container">
-            <mat-icon class="spinner">hourglass_empty</mat-icon>
-            <span>Chargement...</span>
-          </div>
-        } @else if (filteredClasses().length === 0) {
-          <div class="empty-state">
-            <mat-icon>shield</mat-icon>
-            <p>Aucune classe trouvee</p>
-          </div>
-        } @else {
-          <div class="card-grid">
-            @for (cls of filteredClasses(); track cls.id) {
-              <mat-card class="data-card" (click)="openClassEditor(cls)">
-                <mat-card-header>
-                  <mat-card-title>{{ cls.name }}</mat-card-title>
-                  <span class="source-badge">{{ cls.source }}</span>
-                </mat-card-header>
-                <mat-card-content>
-                  <div class="card-details">
-                    <span class="detail-chip">
-                      <mat-icon>casino</mat-icon>
-                      d{{ cls.hitDie }}
-                    </span>
-                    @if (cls.spellcasting) {
-                      <span class="detail-chip">
-                        <mat-icon>auto_fix_high</mat-icon>
-                        {{ cls.spellcasting.ability | uppercase }}
-                      </span>
-                    }
-                  </div>
-                  @if (cls.savingThrows.length > 0) {
-                    <p class="card-subtitle">Sauvegardes: {{ cls.savingThrows.join(', ') | uppercase }}</p>
-                  }
-                  @if (cls.armorProficiencies.length > 0) {
-                    <p class="card-traits">Armures: {{ cls.armorProficiencies.join(', ') }}</p>
-                  }
-                </mat-card-content>
-              </mat-card>
-            }
-          </div>
-        }
-      </div>
-    </mat-tab>
-
-    <!-- Spells Tab -->
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon>auto_fix_high</mat-icon>
-        <span class="tab-label">Sorts ({{ filteredSpells().length }})</span>
-      </ng-template>
-
-      <div class="tab-content">
-        <div class="tab-actions">
-          <button mat-flat-button color="primary" (click)="openSpellEditor()">
-            <mat-icon>add</mat-icon>
-            Nouveau
-          </button>
-        </div>
-
-        @if (isLoading()) {
-          <div class="loading-container">
-            <mat-icon class="spinner">hourglass_empty</mat-icon>
-            <span>Chargement...</span>
-          </div>
-        } @else if (filteredSpells().length === 0) {
-          <div class="empty-state">
+    <a routerLink="sorts" class="hub-card">
+      <mat-card>
+        <mat-card-content>
+          <div class="hub-icon spells-icon">
             <mat-icon>auto_fix_high</mat-icon>
-            <p>Aucun sort trouve</p>
           </div>
-        } @else {
-          <div class="card-grid">
-            @for (spell of filteredSpells(); track spell.id) {
-              <mat-card class="data-card" (click)="openSpellEditor(spell)">
-                <mat-card-header>
-                  <mat-card-title>{{ spell.name }}</mat-card-title>
-                  <span class="source-badge">{{ spell.source }}</span>
-                </mat-card-header>
-                <mat-card-content>
-                  <div class="card-details">
-                    <span class="detail-chip">
-                      <mat-icon>layers</mat-icon>
-                      {{ getSpellLevelLabel(spell.level) }}
-                    </span>
-                    <span class="detail-chip school-chip">
-                      {{ getSchoolLabel(spell.school) }}
-                    </span>
-                  </div>
-                  <div class="card-details">
-                    <span class="detail-chip">
-                      <mat-icon>schedule</mat-icon>
-                      {{ spell.castingTime }}
-                    </span>
-                    <span class="detail-chip">
-                      <mat-icon>straighten</mat-icon>
-                      {{ spell.range }}
-                    </span>
-                  </div>
-                  <p class="card-subtitle">
-                    @if (spell.components.verbal) {V}
-                    @if (spell.components.somatic) { S}
-                    @if (spell.components.material) { M}
-                    &mdash; {{ spell.duration }}
-                  </p>
-                </mat-card-content>
-              </mat-card>
-            }
+          <div class="hub-info">
+            <h2>Sorts</h2>
+            <p>{{ spells().length }} sorts disponibles</p>
           </div>
-        }
-      </div>
-    </mat-tab>
+          <mat-icon class="hub-arrow">chevron_right</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </a>
 
-    <!-- Items Tab -->
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon>inventory_2</mat-icon>
-        <span class="tab-label">Objets ({{ filteredItems().length }})</span>
-      </ng-template>
-
-      <div class="tab-content">
-        <div class="tab-actions">
-          <button mat-flat-button color="primary" (click)="openItemEditor()">
-            <mat-icon>add</mat-icon>
-            Nouveau
-          </button>
-          <button
-            mat-stroked-button
-            (click)="importHerbs()"
-            [disabled]="isImportingHerbs()"
-          >
-            <mat-icon>eco</mat-icon>
-            @if (isImportingHerbs()) {
-              Import en cours...
-            } @else {
-              Importer herbes AideDD
-            }
-          </button>
-        </div>
-
-        <div class="item-filters">
-          <div class="filter-row">
-            <span class="filter-label">Catégorie :</span>
-            <div class="filter-chips">
-              @for (cat of itemCategories; track cat.id) {
-                <button
-                  class="filter-chip"
-                  [class.active]="itemCategoryFilter() === cat.id"
-                  (click)="toggleCategoryFilter(cat.id)"
-                >{{ cat.label }}</button>
-              }
-            </div>
-          </div>
-          <div class="filter-row">
-            <span class="filter-label">Rareté :</span>
-            <div class="filter-chips">
-              @for (r of itemRarities; track r.id) {
-                <button
-                  class="filter-chip rarity-filter-chip"
-                  [class.active]="itemRarityFilter() === r.id"
-                  [attr.data-rarity]="r.id || 'common'"
-                  (click)="toggleRarityFilter(r.id)"
-                >{{ r.label }}</button>
-              }
-            </div>
-          </div>
-        </div>
-
-        @if (isLoading()) {
-          <div class="loading-container">
-            <mat-icon class="spinner">hourglass_empty</mat-icon>
-            <span>Chargement...</span>
-          </div>
-        } @else if (filteredItems().length === 0) {
-          <div class="empty-state">
+    <a routerLink="objets" class="hub-card">
+      <mat-card>
+        <mat-card-content>
+          <div class="hub-icon items-icon">
             <mat-icon>inventory_2</mat-icon>
-            <p>Aucun objet trouve</p>
           </div>
-        } @else {
-          <div class="card-grid">
-            @for (item of filteredItems(); track item.id) {
-              <mat-card class="data-card" (click)="openItemEditor(item)">
-                <mat-card-header>
-                  <mat-card-title>{{ item.name }}</mat-card-title>
-                  <span class="source-badge">{{ item.source }}</span>
-                </mat-card-header>
-                <mat-card-content>
-                  <div class="card-details">
-                    <span class="detail-chip category-chip">
-                      {{ getCategoryLabel(item.category) }}
-                    </span>
-                    @if (item.rarity) {
-                      <span class="detail-chip rarity-chip" [attr.data-rarity]="item.rarity">
-                        {{ item.rarity }}
-                      </span>
-                    }
-                  </div>
-                  <div class="card-details">
-                    @if (item.damage) {
-                      <span class="detail-chip">
-                        <mat-icon>gavel</mat-icon>
-                        {{ item.damage.dice }} {{ item.damage.type }}
-                      </span>
-                    }
-                    @if (item.armorClass) {
-                      <span class="detail-chip">
-                        <mat-icon>shield</mat-icon>
-                        CA {{ item.armorClass.base }}
-                      </span>
-                    }
-                    @if (item.weight) {
-                      <span class="detail-chip">
-                        <mat-icon>fitness_center</mat-icon>
-                        {{ item.weight }} lb
-                      </span>
-                    }
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            }
+          <div class="hub-info">
+            <h2>Objets & Herbes</h2>
+            <p>{{ items().length }} objets disponibles</p>
           </div>
-        }
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+          <mat-icon class="hub-arrow">chevron_right</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </a>
+  </div>
 </div>

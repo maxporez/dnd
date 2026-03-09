@@ -28,8 +28,34 @@ export const routes: Routes = [
   {
     path: 'homebrew',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/homebrew/homebrew.component').then((m) => m.HomebrewComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/homebrew/homebrew.component').then((m) => m.HomebrewComponent),
+      },
+      {
+        path: 'races-classes',
+        loadComponent: () =>
+          import('./features/homebrew/pages/races-classes/races-classes.component').then(
+            (m) => m.RacesClassesComponent,
+          ),
+      },
+      {
+        path: 'sorts',
+        loadComponent: () =>
+          import('./features/homebrew/pages/sorts/sorts.component').then(
+            (m) => m.SortsComponent,
+          ),
+      },
+      {
+        path: 'objets',
+        loadComponent: () =>
+          import('./features/homebrew/pages/objets/objets.component').then(
+            (m) => m.ObjetsComponent,
+          ),
+      },
+    ],
   },
   {
     path: 'notion',
