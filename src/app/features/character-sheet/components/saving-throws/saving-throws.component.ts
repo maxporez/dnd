@@ -35,7 +35,7 @@ import type { AbilityName, SavingThrowProficiencies } from '../../../../models/s
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       margin-bottom: 8px;
     }
 
@@ -61,7 +61,7 @@ import type { AbilityName, SavingThrowProficiencies } from '../../../../models/s
       width: 100%;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--parchment-hover);
       }
     }
 

@@ -111,7 +111,7 @@ export interface ItemPickerDialogData {
       transition: background 0.1s;
 
       &:hover:not(.already-added) {
-        background: rgba(255, 255, 255, 0.06);
+        background: var(--parchment-input);
       }
 
       &.already-added {
@@ -122,7 +122,7 @@ export interface ItemPickerDialogData {
 
     .item-meta {
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.45);
+      color: var(--ink-muted);
     }
 
     .added-icon {
@@ -136,7 +136,7 @@ export interface ItemPickerDialogData {
       align-items: center;
       gap: 12px;
       padding: 24px 16px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-muted);
       text-align: center;
     }
 
@@ -146,7 +146,7 @@ export interface ItemPickerDialogData {
       align-items: center;
       gap: 8px;
       padding: 32px 16px;
-      color: rgba(255, 255, 255, 0.35);
+      color: var(--ink-faint);
       text-align: center;
 
       mat-icon {

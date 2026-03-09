@@ -248,7 +248,7 @@ type DbIds = Record<DbKey, string>;
       font-size: 40px;
       width: 40px;
       height: 40px;
-      color: var(--mat-primary-color, #bb86fc);
+      color: var(--crimson);
     }
 
     .notion-header h1 {
@@ -257,7 +257,7 @@ type DbIds = Record<DbKey, string>;
     }
 
     .subtitle {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--ink-secondary);
       margin: 0;
     }
 
@@ -297,7 +297,7 @@ type DbIds = Record<DbKey, string>;
     }
 
     .status-user {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--ink-secondary);
     }
 
     /* DB config */
@@ -306,7 +306,7 @@ type DbIds = Record<DbKey, string>;
     }
 
     .divider-text {
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--ink-muted);
       font-size: 12px;
       padding: 0 8px;
     }
@@ -331,7 +331,7 @@ type DbIds = Record<DbKey, string>;
       gap: 12px;
       padding: 8px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--parchment-hover);
     }
 
     .db-name {
@@ -343,7 +343,7 @@ type DbIds = Record<DbKey, string>;
     .db-id {
       flex: 1;
       font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-muted);
     }
 
     /* Sync */
@@ -366,14 +366,14 @@ type DbIds = Record<DbKey, string>;
       border-radius: 4px;
       transition: background 0.2s;
 
-      &:hover { background: rgba(255, 255, 255, 0.05); }
+      &:hover { background: var(--parchment-hover); }
       &.disabled { opacity: 0.5; pointer-events: none; }
     }
 
     .sync-arrow {
       font-size: 32px;
       width: 32px; height: 32px;
-      color: var(--mat-primary-color, #bb86fc);
+      color: var(--crimson);
     }
 
     .sync-option-text {
@@ -381,14 +381,14 @@ type DbIds = Record<DbKey, string>;
       flex-direction: column;
       gap: 4px;
 
-      span { color: rgba(255, 255, 255, 0.6); font-size: 13px; }
+      span { color: var(--ink-secondary); font-size: 13px; }
     }
 
     .sync-feedback {
       margin-top: 16px;
       border-radius: 4px;
       padding: 12px;
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--parchment-hover);
 
       mat-progress-bar { margin-bottom: 12px; }
     }
@@ -416,11 +416,11 @@ type DbIds = Record<DbKey, string>;
     .how-it-works {
       padding-left: 20px;
       line-height: 2;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
     }
 
     .info-text {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--ink-secondary);
       margin-bottom: 16px;
       line-height: 1.5;
     }

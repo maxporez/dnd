@@ -70,7 +70,7 @@ import { MatIconModule } from '@angular/material/icon';
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       margin-bottom: 8px;
 
       mat-icon {
@@ -102,7 +102,7 @@ import { MatIconModule } from '@angular/material/icon';
 
     .hp-separator {
       font-size: 20px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--ink-muted);
     }
 
     .hp-max {
@@ -112,7 +112,7 @@ import { MatIconModule } from '@angular/material/icon';
 
     .hp-bar-container {
       height: 4px;
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--border-subtle);
       border-radius: 2px;
       margin-top: 8px;
       overflow: hidden;

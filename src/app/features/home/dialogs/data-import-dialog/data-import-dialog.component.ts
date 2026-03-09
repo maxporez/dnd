@@ -101,7 +101,7 @@ import { GameDataState } from '../../../../core/state/game-data.state';
     }
 
     .title-icon {
-      color: #bb86fc;
+      color: var(--crimson);
     }
 
     mat-dialog-content {
@@ -117,13 +117,13 @@ import { GameDataState } from '../../../../core/state/game-data.state';
     }
 
     .import-message {
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
       font-size: 14px;
       text-align: center;
     }
 
     .progress-percent {
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-muted);
       font-size: 13px;
       text-align: center;
     }
@@ -147,7 +147,7 @@ import { GameDataState } from '../../../../core/state/game-data.state';
     }
 
     .summary-label {
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       font-size: 14px;
       margin-bottom: 12px;
     }
@@ -162,11 +162,11 @@ import { GameDataState } from '../../../../core/state/game-data.state';
         display: flex;
         align-items: center;
         gap: 8px;
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--ink);
         font-size: 14px;
 
         mat-icon {
-          color: #bb86fc;
+          color: var(--crimson);
           font-size: 20px;
           width: 20px;
           height: 20px;
@@ -176,7 +176,7 @@ import { GameDataState } from '../../../../core/state/game-data.state';
 
     .import-date {
       margin-top: 16px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--ink-muted);
       font-size: 12px;
     }
 
@@ -190,7 +190,7 @@ import { GameDataState } from '../../../../core/state/game-data.state';
       text-align: center;
 
       p {
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--ink-secondary);
         font-size: 14px;
       }
     }
@@ -199,11 +199,11 @@ import { GameDataState } from '../../../../core/state/game-data.state';
       font-size: 48px;
       width: 48px;
       height: 48px;
-      color: rgba(255, 255, 255, 0.2);
+      color: var(--ink-ghost);
     }
 
     .no-data-hint {
-      color: rgba(255, 255, 255, 0.45) !important;
+      color: var(--ink-muted) !important;
       font-size: 13px !important;
       max-width: 320px;
     }

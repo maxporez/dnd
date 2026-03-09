@@ -182,7 +182,7 @@ import type { Character } from '../../models/character.model';
       margin: 0;
       font-size: 22px;
       font-weight: 600;
-      color: #e0e0e0;
+      color: var(--ink);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -201,16 +201,16 @@ import type { Character } from '../../models/character.model';
       height: 16px;
       opacity: 0.35;
       transition: opacity 0.2s;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--ink-secondary);
     }
 
     .name-edit {
       flex: 1;
       background: transparent;
       border: none;
-      border-bottom: 2px solid #d5baff;
+      border-bottom: 2px solid var(--crimson);
       outline: none;
-      color: #e0e0e0;
+      color: var(--ink);
       font-size: 22px;
       font-weight: 600;
       font-family: Roboto, sans-serif;
@@ -220,7 +220,7 @@ import type { Character } from '../../models/character.model';
 
     .saving-indicator {
       animation: spin 1s linear infinite;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-muted);
       flex-shrink: 0;
     }
 
@@ -284,7 +284,7 @@ import type { Character } from '../../models/character.model';
     }
 
     .error-message {
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       font-size: 16px;
     }
   `,

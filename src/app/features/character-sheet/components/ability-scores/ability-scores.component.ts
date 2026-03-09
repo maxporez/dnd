@@ -59,7 +59,7 @@ import type { AbilityScores, AbilityName } from '../../../../models/stats.model'
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       margin-bottom: 4px;
     }
 
@@ -85,7 +85,7 @@ import type { AbilityScores, AbilityName } from '../../../../models/stats.model'
 
     .ability-computed {
       font-size: 11px;
-      color: #bb86fc;
+      color: var(--crimson);
       margin-top: 2px;
     }
   `,

@@ -33,7 +33,7 @@ export interface ConfirmDialogData {
   `,
   styles: `
     mat-dialog-content p {
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       line-height: 1.5;
     }
   `,

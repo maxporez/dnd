@@ -142,13 +142,13 @@ import type { Character } from '../../models/character.model';
     .home-title {
       font-size: 2rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--ink);
       margin-bottom: 4px;
     }
 
     .home-subtitle {
       font-size: 1rem;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--ink-secondary);
     }
 
     /* Data alert banner */
@@ -156,8 +156,8 @@ import type { Character } from '../../models/character.model';
       display: flex;
       align-items: center;
       gap: 12px;
-      background: rgba(255, 152, 0, 0.15);
-      border: 1px solid rgba(255, 152, 0, 0.4);
+      background: var(--gold-light);
+      border: 1px solid var(--border-strong);
       border-radius: 12px;
       padding: 12px 16px;
       margin-bottom: 20px;
@@ -165,16 +165,16 @@ import type { Character } from '../../models/character.model';
       transition: background 0.2s;
 
       &:hover {
-        background: rgba(255, 152, 0, 0.25);
+        background: var(--parchment-hover);
       }
 
       mat-icon:first-child {
-        color: #ffb74d;
+        color: var(--gold);
         flex-shrink: 0;
       }
 
       mat-icon:last-child {
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--ink-muted);
         flex-shrink: 0;
       }
     }
@@ -186,12 +186,12 @@ import type { Character } from '../../models/character.model';
       gap: 2px;
 
       strong {
-        color: #ffb74d;
+        color: var(--gold);
         font-size: 14px;
       }
 
       span {
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--ink-secondary);
         font-size: 13px;
       }
     }
@@ -208,7 +208,7 @@ import type { Character } from '../../models/character.model';
       margin-bottom: 20px;
       cursor: pointer;
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       transition: background 0.2s;
 
       &:hover {
@@ -229,7 +229,7 @@ import type { Character } from '../../models/character.model';
     }
 
     .data-status-action {
-      color: rgba(255, 255, 255, 0.3) !important;
+      color: var(--ink-ghost) !important;
       font-size: 18px !important;
       width: 18px !important;
       height: 18px !important;
@@ -277,16 +277,16 @@ import type { Character } from '../../models/character.model';
         font-size: 64px;
         width: 64px;
         height: 64px;
-        color: rgba(255, 255, 255, 0.15);
+        color: var(--ink-ghost);
       }
 
       h3 {
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--ink-muted);
         font-weight: 500;
       }
 
       p {
-        color: rgba(255, 255, 255, 0.35);
+        color: var(--ink-faint);
         font-size: 14px;
       }
     }
@@ -304,13 +304,13 @@ import type { Character } from '../../models/character.model';
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 20px var(--shadow);
       }
     }
 
     .card-avatar-icon {
-      background: rgba(187, 134, 252, 0.2);
-      color: #bb86fc;
+      background: var(--crimson-light);
+      color: var(--crimson);
       border-radius: 50%;
       padding: 4px;
       font-size: 32px;
@@ -336,8 +336,8 @@ import type { Character } from '../../models/character.model';
 
     .class-badge {
       display: inline-block;
-      background: rgba(187, 134, 252, 0.15);
-      color: #ce93d8;
+      background: var(--crimson-light);
+      color: var(--crimson);
       border-radius: 12px;
       padding: 2px 10px;
       font-size: 12px;
@@ -345,14 +345,14 @@ import type { Character } from '../../models/character.model';
     }
 
     .no-class {
-      color: rgba(255, 255, 255, 0.35);
+      color: var(--ink-faint);
       font-size: 13px;
       font-style: italic;
     }
 
     .character-level {
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-muted);
       font-weight: 500;
     }
 

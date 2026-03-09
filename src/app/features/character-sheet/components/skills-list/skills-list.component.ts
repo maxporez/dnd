@@ -41,7 +41,7 @@ type ProficiencyLevel = 'none' | 'proficient' | 'expert';
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       margin-bottom: 8px;
     }
 
@@ -67,7 +67,7 @@ type ProficiencyLevel = 'none' | 'proficient' | 'expert';
       width: 100%;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--parchment-hover);
       }
     }
 
@@ -94,7 +94,7 @@ type ProficiencyLevel = 'none' | 'proficient' | 'expert';
 
     .skill-ability {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--ink-muted);
       text-transform: uppercase;
       flex-shrink: 0;
     }

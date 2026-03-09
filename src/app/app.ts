@@ -99,7 +99,7 @@ import { AuthService } from './core/services/auth.service';
     }
 
     .top-nav a.active {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--border-subtle);
     }
 
     /* Contenu principal */
@@ -115,8 +115,8 @@ import { AuthService } from './core/services/auth.service';
       right: 0;
       z-index: 100;
       display: none; /* cachée par défaut, affichée sur mobile */
-      background: #1e1e3a;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: #3d2b1f;
+      border-top: 1px solid var(--border-subtle);
       height: 64px;
       padding-bottom: env(safe-area-inset-bottom);
     }
@@ -128,7 +128,7 @@ import { AuthService } from './core/services/auth.service';
       align-items: center;
       justify-content: center;
       gap: 4px;
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--ink-muted);
       text-decoration: none;
       font-size: 11px;
       font-family: Roboto, sans-serif;
@@ -144,11 +144,11 @@ import { AuthService } from './core/services/auth.service';
     }
 
     .bottom-nav-item.active {
-      color: #d5baff;
+      color: var(--crimson);
     }
 
     .bottom-nav-item:hover {
-      color: rgba(255, 255, 255, 0.85);
+      color: var(--ink);
     }
 
     @media (max-width: 768px) {

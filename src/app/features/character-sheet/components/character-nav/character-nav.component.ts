@@ -37,7 +37,7 @@ import { MatIconModule } from '@angular/material/icon';
     .char-nav {
       display: flex;
       gap: 4px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--border);
       margin-bottom: 20px;
       padding-bottom: 4px;
     }
@@ -47,7 +47,7 @@ import { MatIconModule } from '@angular/material/icon';
       align-items: center;
       gap: 6px;
       font-size: 14px;
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--ink-muted);
 
       mat-icon {
         font-size: 18px;
@@ -56,14 +56,14 @@ import { MatIconModule } from '@angular/material/icon';
       }
 
       &.active {
-        color: #bb86fc;
-        background: rgba(187, 134, 252, 0.08);
-        border-bottom: 2px solid #bb86fc;
+        color: var(--crimson);
+        background: var(--crimson-light);
+        border-bottom: 2px solid var(--crimson);
         margin-bottom: -5px;
       }
 
       &:hover:not(.active) {
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--ink-secondary);
       }
     }
 
@@ -75,8 +75,8 @@ import { MatIconModule } from '@angular/material/icon';
         left: 0;
         right: 0;
         z-index: 100;
-        background: #1e1e3a;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: #3d2b1f;
+        border-top: 1px solid var(--border-strong);
         border-bottom: none;
         margin-bottom: 0;
         padding-bottom: env(safe-area-inset-bottom);
@@ -87,7 +87,7 @@ import { MatIconModule } from '@angular/material/icon';
         flex: 1;
         height: 100%;
         border-radius: 0;
-        color: rgba(255, 255, 255, 0.55);
+        color: rgba(244, 228, 193, 0.55);
         font-size: 11px;
 
         /* Forcer le contenu mat-button en colonne centrée */
@@ -107,11 +107,11 @@ import { MatIconModule } from '@angular/material/icon';
         }
 
         &.active {
-          color: #d5baff;
+          color: #f4e4c1;
           background: transparent;
           border-bottom: none;
           margin-bottom: 0;
-          border-top: 2px solid #d5baff;
+          border-top: 2px solid #f4e4c1;
         }
       }
     }

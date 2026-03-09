@@ -122,15 +122,15 @@ export interface SpellPickerDialogData {
       font-size: 12px;
       padding: 2px 10px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--border);
       background: transparent;
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--ink-muted);
       cursor: pointer;
       font-family: inherit;
       transition: all 0.12s;
 
-      &:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
-      &.active { background: rgba(0,188,212,0.15); border-color: #4dd0e1; color: #4dd0e1; }
+      &:hover { background: var(--parchment-input); color: var(--ink); }
+      &.active { background: var(--arcane-light); border-color: var(--arcane); color: var(--arcane); }
     }
 
     .results-list {
@@ -143,13 +143,13 @@ export interface SpellPickerDialogData {
       border-radius: 6px;
       transition: background 0.1s;
 
-      &:hover:not(.already-added) { background: rgba(255,255,255,0.06); }
+      &:hover:not(.already-added) { background: var(--parchment-input); }
       &.already-added { opacity: 0.5; cursor: default; }
     }
 
     .spell-meta {
       font-size: 12px;
-      color: rgba(255,255,255,0.4);
+      color: var(--ink-muted);
     }
 
     .added-icon { color: #81c784; font-size: 18px; }
@@ -160,7 +160,7 @@ export interface SpellPickerDialogData {
       align-items: center;
       gap: 8px;
       padding: 24px 16px;
-      color: rgba(255,255,255,0.4);
+      color: var(--ink-muted);
       text-align: center;
 
       mat-icon { font-size: 28px; width: 28px; height: 28px; }

@@ -44,7 +44,7 @@ import { ModifierFormatPipe } from '../../../../shared/pipes/modifier-format.pip
     }
 
     .combat-icon {
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--ink-muted);
       margin-bottom: 4px;
     }
 
@@ -59,13 +59,13 @@ import { ModifierFormatPipe } from '../../../../shared/pipes/modifier-format.pip
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--ink-secondary);
       margin-top: 2px;
     }
 
     .combat-unit {
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--ink-muted);
     }
   `,
 })
