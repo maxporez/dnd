@@ -1,0 +1,66 @@
+@if (spell(); as s) {
+  <div class="detail-panel">
+    <div class="detail-chips">
+      <span class="chip school">{{ getSchoolLabel(s.school) }}</span>
+      <span class="chip">{{ s.castingTime }}</span>
+      <span class="chip">{{ s.range }}</span>
+      <span class="chip">{{ s.duration }}</span>
+      @if (getComponents(s)) {
+        <span class="chip comp">{{ getComponents(s) }}</span>
+      }
+    </div>
+
+    @if (getMaterialDetail(s)) {
+      <p class="material-detail">
+        <mat-icon>inventory_2</mat-icon>
+        {{ getMaterialDetail(s) }}
+      </p>
+    }
+
+    @if (s.description) {
+      <p class="detail-description">{{ s.description }}</p>
+    }
+
+    @if (s.higherLevels) {
+      <div class="higher-levels">
+        <span class="higher-label">Niveaux supérieurs.</span>
+        {{ s.higherLevels }}
+      </div>
+    }
+
+    @if (s.classes.length) {
+      <p class="detail-classes">{{ s.classes.join(', ') }}</p>
+    }
+  </div>
+}
+
+@if (item(); as i) {
+  <div class="detail-panel">
+    <div class="detail-chips">
+      <span class="chip category">{{ getCategoryLabel(i.category) }}</span>
+      @if (i.rarity) {
+        <span class="chip rarity">{{ i.rarity }}</span>
+      }
+      @if (i.damage) {
+        <span class="chip damage">{{ i.damage.dice }} {{ i.damage.type }}</span>
+      }
+      @if (i.armorClass) {
+        <span class="chip">CA {{ i.armorClass.base }}</span>
+      }
+      @if (i.weight) {
+        <span class="chip">{{ i.weight }} lb</span>
+      }
+      @if (i.requiresAttunement) {
+        <span class="chip attune">Harmonisation</span>
+      }
+    </div>
+
+    @if (i.properties && i.properties.length) {
+      <p class="detail-properties">{{ i.properties.join(', ') }}</p>
+    }
+
+    @if (i.description) {
+      <p class="detail-description">{{ i.description }}</p>
+    }
+  </div>
+}

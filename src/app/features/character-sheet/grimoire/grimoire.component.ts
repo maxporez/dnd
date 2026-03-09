@@ -16,6 +16,7 @@ import { SCHOOL_LABELS } from '../../../data/labels.data';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { CharacterNavComponent } from '../components/character-nav/character-nav.component';
+import { ItemDetailPanelComponent } from '../../../shared/components/item-detail-panel/item-detail-panel.component';
 import { SpellPickerDialogComponent } from './spell-picker-dialog.component';
 import type { SpellEntry, SpellSlots, Character } from '../../../models/character.model';
 
@@ -35,6 +36,7 @@ import type { SpellEntry, SpellSlots, Character } from '../../../models/characte
     BackButtonComponent,
     LoadingSpinnerComponent,
     CharacterNavComponent,
+    ItemDetailPanelComponent,
   ],
   templateUrl: './grimoire.component.html',
   styleUrl: './grimoire.component.scss',
@@ -52,6 +54,7 @@ export class GrimoireComponent implements OnInit, OnDestroy {
   readonly searchQuery = signal('');
   readonly levelFilter = signal<number | null>(null);
   readonly showPreparedOnly = signal(false);
+  readonly expandedSpellId = signal<string | null>(null);
 
   readonly spellLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
@@ -212,5 +215,13 @@ export class GrimoireComponent implements OnInit, OnDestroy {
 
   getLevelEntries(): number[] {
     return [...this.spellsByLevel().keys()];
+  }
+
+  toggleExpanded(spellId: string): void {
+    this.expandedSpellId.set(this.expandedSpellId() === spellId ? null : spellId);
+  }
+
+  getSpellDetail(spellId: string) {
+    return this.spellDetailsMap().get(spellId) ?? null;
   }
 }

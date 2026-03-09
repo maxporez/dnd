@@ -1,0 +1,119 @@
+.detail-panel {
+  padding: 8px 12px 12px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    max-height: 600px;
+    transform: translateY(0);
+  }
+}
+
+.detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.chip {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+
+  &.school {
+    background: rgba(0, 188, 212, 0.12);
+    color: #4dd0e1;
+  }
+
+  &.category {
+    background: rgba(187, 134, 252, 0.12);
+    color: #bb86fc;
+  }
+
+  &.rarity {
+    background: rgba(255, 213, 79, 0.12);
+    color: #ffd54f;
+  }
+
+  &.damage {
+    background: rgba(239, 83, 80, 0.12);
+    color: #ef5350;
+  }
+
+  &.comp {
+    background: rgba(129, 199, 132, 0.12);
+    color: #81c784;
+  }
+
+  &.attune {
+    background: rgba(255, 213, 79, 0.1);
+    color: #ffd54f;
+  }
+}
+
+.material-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 8px;
+  font-style: italic;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+}
+
+.detail-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+}
+
+.higher-levels {
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 8px;
+  padding: 6px 8px;
+  background: rgba(187, 134, 252, 0.06);
+  border-radius: 6px;
+  border-left: 2px solid rgba(187, 134, 252, 0.3);
+}
+
+.higher-label {
+  font-weight: 600;
+  color: #bb86fc;
+}
+
+.detail-classes {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0;
+  font-style: italic;
+}
+
+.detail-properties {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 8px;
+  font-style: italic;
+}

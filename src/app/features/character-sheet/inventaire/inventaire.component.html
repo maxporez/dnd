@@ -101,7 +101,7 @@
       <mat-card class="items-card">
         <div class="items-list">
           @for (item of filteredInventory(); track item.id; let last = $last) {
-            <div class="item-row">
+            <div class="item-row" [class.expanded]="expandedItemId() === item.id">
               <!-- Equipped toggle -->
               <button
                 mat-icon-button
@@ -113,8 +113,8 @@
                 <mat-icon>{{ item.equipped ? 'shield' : 'shield_outlined' }}</mat-icon>
               </button>
 
-              <!-- Item name + notes -->
-              <div class="item-info">
+              <!-- Item name + notes (clickable) -->
+              <div class="item-info" (click)="toggleExpanded(item.id)">
                 <span class="item-name">{{ item.name }}</span>
                 @if (item.notes) {
                   <span class="item-notes">{{ item.notes }}</span>
@@ -123,6 +123,11 @@
                   <span class="homebrew-badge">Homebrew</span>
                 }
               </div>
+
+              <!-- Expand indicator -->
+              <button mat-icon-button class="expand-btn" (click)="toggleExpanded(item.id)" matTooltip="Détails">
+                <mat-icon>{{ expandedItemId() === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
 
               <!-- Attunement -->
               <button
@@ -151,6 +156,11 @@
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
+
+            <!-- Expanded detail panel -->
+            @if (expandedItemId() === item.id && item.itemId) {
+              <app-item-detail-panel [item]="getItemDetail(item.itemId)" />
+            }
 
             @if (!last) {
               <mat-divider />
