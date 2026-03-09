@@ -82,7 +82,7 @@
   } @else {
     <div class="card-grid">
       @for (item of filteredItems(); track item.id) {
-        <mat-card class="data-card" (click)="openItemEditor(item)">
+        <mat-card class="data-card" (click)="openItemDetail(item)">
           <mat-card-header>
             <mat-card-title>{{ item.name }}</mat-card-title>
             <span class="source-badge">{{ item.source }}</span>

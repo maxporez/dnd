@@ -110,6 +110,14 @@ export class SortsComponent implements OnInit {
     return level === 0 ? 'Tour de magie' : `Niveau ${level}`;
   }
 
+  openSpellDetail(spell: GameSpell): void {
+    this.openEditor({
+      type: 'spell',
+      item: spell,
+      isNew: false,
+    });
+  }
+
   openSpellEditor(spell?: GameSpell): void {
     this.openEditor({
       type: 'spell',
