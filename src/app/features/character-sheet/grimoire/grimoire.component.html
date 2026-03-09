@@ -138,7 +138,7 @@
 
           <mat-card class="spells-card">
             @for (spell of spellsByLevel().get(level)!; track spell.spellId; let last = $last) {
-              <div class="spell-row">
+              <div class="spell-row" [class.expanded]="expandedSpellId() === spell.spellId">
                 <!-- Prepared toggle -->
                 <button
                   mat-icon-button
@@ -152,8 +152,8 @@
                   <mat-icon>{{ spell.alwaysPrepared ? 'auto_awesome' : spell.prepared ? 'bolt' : 'radio_button_unchecked' }}</mat-icon>
                 </button>
 
-                <!-- Spell info -->
-                <div class="spell-info">
+                <!-- Spell info (clickable) -->
+                <div class="spell-info" (click)="toggleExpanded(spell.spellId)">
                   <span class="spell-name">{{ spell.name }}</span>
                   <div class="spell-tags">
                     @if (getSpellSchool(spell.spellId)) {
@@ -171,11 +171,21 @@
                   </div>
                 </div>
 
+                <!-- Expand indicator -->
+                <button mat-icon-button class="expand-btn" (click)="toggleExpanded(spell.spellId)" matTooltip="Détails">
+                  <mat-icon>{{ expandedSpellId() === spell.spellId ? 'expand_less' : 'expand_more' }}</mat-icon>
+                </button>
+
                 <!-- Delete -->
                 <button mat-icon-button class="delete-btn" (click)="removeSpell(spell)" matTooltip="Retirer">
                   <mat-icon>delete_outline</mat-icon>
                 </button>
               </div>
+
+              <!-- Expanded detail panel -->
+              @if (expandedSpellId() === spell.spellId) {
+                <app-item-detail-panel [spell]="getSpellDetail(spell.spellId)" />
+              }
 
               @if (!last) {
                 <mat-divider />

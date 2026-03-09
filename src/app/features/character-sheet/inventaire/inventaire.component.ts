@@ -17,6 +17,7 @@ import { GameDataState } from '../../../core/state/game-data.state';
 import { BackButtonComponent } from '../../../shared/components/back-button/back-button.component';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 import { CharacterNavComponent } from '../components/character-nav/character-nav.component';
+import { ItemDetailPanelComponent } from '../../../shared/components/item-detail-panel/item-detail-panel.component';
 import { ItemPickerDialogComponent } from './item-picker-dialog.component';
 import type { InventoryItem, Currency, Character } from '../../../models/character.model';
 
@@ -38,6 +39,7 @@ import type { InventoryItem, Currency, Character } from '../../../models/charact
     BackButtonComponent,
     LoadingSpinnerComponent,
     CharacterNavComponent,
+    ItemDetailPanelComponent,
   ],
   templateUrl: './inventaire.component.html',
   styleUrl: './inventaire.component.scss',
@@ -54,6 +56,7 @@ export class InventaireComponent implements OnInit, OnDestroy {
 
   readonly searchQuery = signal('');
   readonly showEquippedOnly = signal(false);
+  readonly expandedItemId = signal<string | null>(null);
 
   private saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -160,6 +163,14 @@ export class InventaireComponent implements OnInit, OnDestroy {
       inventory: char.inventory.filter(i => i.id !== item.id),
     });
     this.snackBar.open(`"${item.name}" retiré`, 'OK', { duration: 1500 });
+  }
+
+  toggleExpanded(itemId: string): void {
+    this.expandedItemId.set(this.expandedItemId() === itemId ? null : itemId);
+  }
+
+  getItemDetail(itemId: string) {
+    return this.gameDataState.items().find(i => i.id === itemId) ?? null;
   }
 
   openItemPicker(): void {
