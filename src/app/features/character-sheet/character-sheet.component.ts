@@ -16,6 +16,8 @@ import { AbilityScoresComponent } from './components/ability-scores/ability-scor
 import { CombatStatsComponent } from './components/combat-stats/combat-stats.component';
 import { HitPointsComponent } from './components/hit-points/hit-points.component';
 import { CharacterNavComponent } from './components/character-nav/character-nav.component';
+import { CharacterIdentityCardComponent } from '../../shared/components/cards/character-identity-card/character-identity-card.component';
+import { CombatStatsCardComponent } from '../../shared/components/cards/combat-stats-card/combat-stats-card.component';
 import { RACES } from '../../data/base-races.data';
 import { CLASSES } from '../../data/base-classes.data';
 import type { AbilityName, SkillName } from '../../models/stats.model';
@@ -28,8 +30,8 @@ import type { Character } from '../../models/character.model';
     MatCardModule, MatInputModule, MatFormFieldModule, MatSelectModule,
     MatIconModule, MatButtonModule,
     LoadingSpinnerComponent, BackButtonComponent,
-    AbilityScoresComponent,
-    CombatStatsComponent, HitPointsComponent, CharacterNavComponent,
+    AbilityScoresComponent, CharacterNavComponent,
+    CharacterIdentityCardComponent, CombatStatsCardComponent,
   ],
   template: `
     @if (characterState.loading()) {
@@ -46,34 +48,36 @@ import type { Character } from '../../models/character.model';
       </div>
     } @else if (character(); as char) {
       <div class="page-container sheet-container">
-        <!-- Header -->
-        <div class="sheet-header">
+        <!-- Top bar : retour + saving indicator -->
+        <div class="sheet-topbar">
           <app-back-button />
-          @if (editingName()) {
-            <input
-              class="name-edit"
-              [ngModel]="char.name"
-              (ngModelChange)="onNameChange($event)"
-              (blur)="editingName.set(false)"
-              (keydown.enter)="editingName.set(false)"
-              placeholder="Nom du personnage"
-              autofocus
-            />
-          } @else {
-            <h1 class="char-name" (click)="editingName.set(true)">
-              {{ char.name || 'Nom du personnage' }}
-              <mat-icon class="name-edit-icon">edit</mat-icon>
-            </h1>
-          }
           @if (characterState.saving()) {
             <mat-icon class="saving-indicator">sync</mat-icon>
           }
         </div>
 
-        <!-- Navigation Fiche / Inventaire / Grimoire -->
-        <app-character-nav [characterId]="char.id" />
+        <!-- Identity card : nom, race, classe, niveau, XP -->
+        <section class="sheet-section">
+          <app-character-identity-card
+            [character]="char"
+            (nameClick)="editingName.set(true)"
+          />
+          @if (editingName()) {
+            <div class="name-edit-row">
+              <input
+                class="name-edit"
+                [ngModel]="char.name"
+                (ngModelChange)="onNameChange($event)"
+                (blur)="editingName.set(false)"
+                (keydown.enter)="editingName.set(false)"
+                placeholder="Nom du personnage"
+                autofocus
+              />
+            </div>
+          }
+        </section>
 
-        <!-- Race / Class / Level selectors -->
+        <!-- Selectors race / classe / niveau -->
         <div class="selectors-row">
           <mat-form-field appearance="outline" class="selector-field">
             <mat-label>Race</mat-label>
@@ -112,21 +116,13 @@ import type { Character } from '../../models/character.model';
           </mat-form-field>
         </div>
 
-        <!-- Combat Stats -->
-        <section class="sheet-section">
-          <app-combat-stats
-            [armorClass]="char.derivedStats.armorClass"
-            [initiative]="char.derivedStats.initiative"
-            [speed]="char.derivedStats.speed"
-          />
-        </section>
+        <!-- Navigation Fiche / Inventaire / Grimoire -->
+        <app-character-nav [characterId]="char.id" />
 
-        <!-- Hit Points -->
+        <!-- Combat Stats + PV -->
         <section class="sheet-section">
-          <app-hit-points
-            [currentHp]="char.derivedStats.hitPointsCurrent"
-            [maxHp]="char.derivedStats.hitPointsMax"
-            [proficiencyBonus]="char.derivedStats.proficiencyBonus"
+          <app-combat-stats-card
+            [character]="char"
             (hpChange)="onHpChange($event)"
           />
         </section>
@@ -155,50 +151,26 @@ import type { Character } from '../../models/character.model';
       padding-bottom: 48px;
     }
 
-    .sheet-header {
+    .sheet-topbar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
+      justify-content: space-between;
+      margin-bottom: 10px;
     }
 
-    .char-name {
-      flex: 1;
-      margin: 0;
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--ink);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      user-select: none;
-      line-height: 1.2;
-
-      &:hover .name-edit-icon {
-        opacity: 1;
-      }
-    }
-
-    .name-edit-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      opacity: 0.35;
-      transition: opacity 0.2s;
-      color: var(--ink-secondary);
+    .name-edit-row {
+      margin-top: 6px;
     }
 
     .name-edit {
-      flex: 1;
       background: transparent;
       border: none;
       border-bottom: 2px solid var(--crimson);
       outline: none;
       color: var(--ink);
-      font-size: 22px;
-      font-weight: 600;
-      font-family: Roboto, sans-serif;
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 700;
       padding: 2px 0;
       width: 100%;
     }

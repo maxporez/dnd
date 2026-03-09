@@ -1,0 +1,267 @@
+// ── Wrapper sans bordure latérale ─────────────────────────
+
+.ability-scores-wrapper {
+  padding: 4px 0 0;
+}
+
+// ── Section header ────────────────────────────────────────
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: var(--crimson);
+}
+
+.ornament-line {
+  flex: 1;
+  height: 12px;
+  min-width: 0;
+}
+
+.section-title {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--crimson);
+  white-space: nowrap;
+}
+
+// ── Grille ────────────────────────────────────────────────
+
+.ability-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+// ── Boîte ability (inspirée du PDF) ──────────────────────
+
+.ability-box {
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--parchment);
+  position: relative;
+
+  // Double bordure interne (comme sur le PDF)
+  box-shadow: inset 0 0 0 2px var(--parchment), inset 0 0 0 3px var(--border);
+}
+
+// ── Titre ability ─────────────────────────────────────────
+
+.ability-title {
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 3px 4px;
+}
+
+// ── Corps : cercle + modificateur ────────────────────────
+
+.ability-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 8px 6px 4px;
+  gap: 4px;
+}
+
+.score-circle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.score-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--parchment-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.score-value {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.score-label {
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-muted);
+}
+
+.modifier-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.modifier-value {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+  min-width: 44px;
+  text-align: center;
+  font-style: italic;
+
+  &.negative {
+    color: var(--crimson);
+  }
+}
+
+.modifier-label {
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+// ── Séparateur SVG ────────────────────────────────────────
+
+.ability-separator {
+  padding: 0 8px;
+  color: var(--border-strong);
+  margin-bottom: 4px;
+
+  svg {
+    width: 100%;
+    height: 6px;
+    display: block;
+  }
+}
+
+// ── Liste compétences ────────────────────────────────────
+
+.skills-list {
+  padding: 0 6px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 2px;
+  border-radius: 2px;
+
+  &:hover {
+    background: var(--parchment-hover);
+  }
+}
+
+.save-row {
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 2px;
+  padding-bottom: 3px;
+}
+
+.prof-diamond {
+  font-size: 11px;
+  width: 13px;
+  text-align: center;
+  flex-shrink: 0;
+  color: var(--crimson);
+  line-height: 1;
+}
+
+.skill-bonus {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+.skill-name {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 12px;
+  flex: 1;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.save-name {
+    color: var(--ink-muted);
+  }
+}
+
+// ── Bouton expand ─────────────────────────────────────────
+
+.expand-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  padding: 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-ghost);
+  margin-top: 1px;
+
+  &:hover {
+    color: var(--ink-muted);
+  }
+}
+
+.expand-svg {
+  width: 20px;
+  height: 8px;
+  transition: transform 0.2s;
+
+  &.flipped {
+    transform: scaleY(-1);
+  }
+}
+
+// ── Footer ornemental ─────────────────────────────────────
+
+.section-footer {
+  margin-top: 10px;
+  color: var(--crimson);
+
+  .footer-ornament {
+    width: 100%;
+    height: 10px;
+    display: block;
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────
+
+@media (max-width: 380px) {
+  .ability-grid {
+    grid-template-columns: 1fr;
+  }
+}

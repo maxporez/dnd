@@ -76,5 +76,12 @@ export const routes: Routes = [
       },
     ],
   },
+  // Dev sandbox (no auth guard — dev/testing only)
+  {
+    path: 'dev',
+    loadComponent: () =>
+      import('./features/dev-sandbox/dev-sandbox.component').then(m => m.DevSandboxComponent),
+  },
+
   { path: '**', redirectTo: '' },
 ];

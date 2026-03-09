@@ -54,7 +54,9 @@
       "Bash(rtk grep \"builder\\\\|NG_APP\" angular.json)",
       "Bash(rtk grep \"@types/node\" package.json)",
       "Bash(rtk tsc --noEmit -p tsconfig.app.json)",
-      "Bash(npx tsc --noEmit -p tsconfig.app.json)"
+      "Bash(npx tsc --noEmit -p tsconfig.app.json)",
+      "Bash(rtk tsc --noEmit)",
+      "Bash(npx tsc --noEmit)"
     ]
   }
 }

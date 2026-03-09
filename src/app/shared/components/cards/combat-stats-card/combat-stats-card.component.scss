@@ -1,0 +1,214 @@
+.combat-wrapper {
+  padding: 4px 0 0;
+}
+
+// ── Section header (identique à ability-scores-card) ──
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  color: var(--crimson);
+}
+
+.ornament-line {
+  flex: 1;
+  height: 12px;
+  min-width: 0;
+}
+
+.section-title {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--crimson);
+  white-space: nowrap;
+}
+
+// ── Grille stats ──────────────────────────────────────
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// ── Cellule stat ──────────────────────────────────────
+
+.stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 6px 6px;
+  background: var(--parchment);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px var(--parchment), inset 0 0 0 3px var(--border);
+  cursor: default;
+
+  &:hover {
+    background: var(--parchment-hover);
+  }
+}
+
+.stat-value {
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 24px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+
+  &.dice {
+    font-size: 14px;
+    font-style: normal;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    color: var(--ink-secondary);
+  }
+}
+
+.stat-unit {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--ink-secondary);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+
+// ── Séparateur interne ────────────────────────────────
+
+.inner-separator {
+  color: var(--border-strong);
+  margin-bottom: 10px;
+
+  svg {
+    width: 100%;
+    height: 6px;
+    display: block;
+  }
+}
+
+// ── HP section ────────────────────────────────────────
+
+.hp-section {
+  padding: 0 2px;
+}
+
+.hp-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.heart-icon {
+  width: 16px;
+  height: 14px;
+  color: var(--crimson);
+  flex-shrink: 0;
+}
+
+.hp-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-secondary);
+  flex: 1;
+}
+
+.hp-ratio {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-muted);
+}
+
+.hp-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.hp-input {
+  width: 120px;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    padding: 0 8px;
+  }
+
+  ::ng-deep input {
+    text-align: center;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+}
+
+.temp-hp {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2e7d32;
+  background: rgba(46, 125, 50, 0.1);
+  border: 1px solid rgba(46, 125, 50, 0.3);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.hp-bar-wrap {
+  height: 5px;
+  background: var(--border-subtle);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hp-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: #4caf50;
+  transition: width 0.3s ease;
+
+  &.mid  { background: #ff9800; }
+  &.low  { background: var(--crimson); }
+}
+
+// ── Footer ornemental ─────────────────────────────────
+
+.section-footer {
+  margin-top: 10px;
+  color: var(--crimson);
+
+  .footer-ornament {
+    width: 100%;
+    height: 10px;
+    display: block;
+  }
+}

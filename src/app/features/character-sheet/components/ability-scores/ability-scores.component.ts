@@ -45,7 +45,7 @@ type ProficiencyLevel = 'none' | 'proficient' | 'expert';
               <button
                 class="skill-row save-row-inline"
                 (click)="onSaveToggle(ability)"
-                [matTooltip]="isSaveProficient(ability) ? 'Maîtrise JS' : 'JS non maîtrisé'"
+                [matTooltip]="isSaveProficient(ability) ? 'Maîtrise JS' : ''"
               >
                 <span class="prof-dot">{{ isSaveProficient(ability) ? '\u25CF' : '\u25CB' }}</span>
                 <span class="skill-bonus">{{ getSaveBonus(ability) | modifierFormat }}</span>
@@ -154,7 +154,7 @@ export class AbilityScoresComponent {
     switch (this.getProfLevel(skill)) {
       case 'proficient': return 'Maitrise';
       case 'expert': return 'Expertise';
-      default: return 'Non maitrise';
+      default: return '';
     }
   }
 
