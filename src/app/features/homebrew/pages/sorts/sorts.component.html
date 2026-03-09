@@ -71,7 +71,7 @@
   } @else {
     <div class="card-grid">
       @for (spell of filteredSpells(); track spell.id) {
-        <mat-card class="data-card" (click)="openSpellEditor(spell)">
+        <mat-card class="data-card" (click)="openSpellDetail(spell)">
           <mat-card-header>
             <mat-card-title>{{ spell.name }}</mat-card-title>
             <span class="source-badge">{{ spell.source }}</span>

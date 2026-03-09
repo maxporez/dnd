@@ -112,6 +112,14 @@ export class ObjetsComponent implements OnInit {
     }
   }
 
+  openItemDetail(item: GameItem): void {
+    this.openEditor({
+      type: 'item',
+      item: item,
+      isNew: false,
+    });
+  }
+
   openItemEditor(item?: GameItem): void {
     this.openEditor({
       type: 'item',
