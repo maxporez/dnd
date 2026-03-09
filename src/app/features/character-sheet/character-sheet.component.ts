@@ -13,8 +13,6 @@ import { GameDataState } from '../../core/state/game-data.state';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
 import { BackButtonComponent } from '../../shared/components/back-button/back-button.component';
 import { AbilityScoresComponent } from './components/ability-scores/ability-scores.component';
-import { SkillsListComponent } from './components/skills-list/skills-list.component';
-import { SavingThrowsComponent } from './components/saving-throws/saving-throws.component';
 import { CombatStatsComponent } from './components/combat-stats/combat-stats.component';
 import { HitPointsComponent } from './components/hit-points/hit-points.component';
 import { CharacterNavComponent } from './components/character-nav/character-nav.component';
@@ -30,7 +28,7 @@ import type { Character } from '../../models/character.model';
     MatCardModule, MatInputModule, MatFormFieldModule, MatSelectModule,
     MatIconModule, MatButtonModule,
     LoadingSpinnerComponent, BackButtonComponent,
-    AbilityScoresComponent, SkillsListComponent, SavingThrowsComponent,
+    AbilityScoresComponent,
     CombatStatsComponent, HitPointsComponent, CharacterNavComponent,
   ],
   template: `
@@ -133,34 +131,21 @@ import type { Character } from '../../models/character.model';
           />
         </section>
 
-        <!-- Ability Scores -->
+        <!-- Ability Scores + Save + Skills -->
         <section class="sheet-section">
           <app-ability-scores
             [baseScores]="char.baseAbilityScores"
             [computedScores]="char.computedAbilityScores"
             [modifiers]="char.abilityModifiers"
+            [skillProficiencies]="char.skillProficiencies"
+            [skillBonuses]="char.computedSkillBonuses"
+            [saveProficiencies]="char.savingThrowProficiencies"
+            [saveBonuses]="char.computedSaveBonuses"
             (scoreChange)="onAbilityScoreChange($event)"
+            (skillProficiencyChange)="onSkillToggle($event)"
+            (saveChange)="onSaveToggle($event)"
           />
         </section>
-
-        <!-- Saves & Skills columns -->
-        <div class="saves-skills-row">
-          <mat-card class="saves-card">
-            <app-saving-throws
-              [proficiencies]="char.savingThrowProficiencies"
-              [bonuses]="char.computedSaveBonuses"
-              (proficiencyChange)="onSaveToggle($event)"
-            />
-          </mat-card>
-
-          <mat-card class="skills-card">
-            <app-skills-list
-              [proficiencies]="char.skillProficiencies"
-              [bonuses]="char.computedSkillBonuses"
-              (proficiencyChange)="onSkillToggle($event)"
-            />
-          </mat-card>
-        </div>
       </div>
     }
   `,
@@ -250,23 +235,6 @@ import type { Character } from '../../models/character.model';
       margin-bottom: 20px;
     }
 
-    .saves-skills-row {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .saves-card,
-    .skills-card {
-      padding: 16px;
-    }
-
-    @media (max-width: 600px) {
-      .saves-skills-row {
-        grid-template-columns: 1fr;
-      }
-    }
 
     .error-container {
       display: flex;

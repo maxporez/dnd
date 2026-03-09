@@ -1,0 +1,150 @@
+.ability-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 400px) {
+  .ability-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.ability-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px 6px;
+  text-align: center;
+}
+
+.ability-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-secondary);
+  margin-bottom: 2px;
+}
+
+.ability-modifier {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.ability-input {
+  width: 60px;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    padding: 0 4px;
+  }
+
+  ::ng-deep input {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+  }
+}
+
+.ability-computed {
+  font-size: 10px;
+  color: var(--crimson);
+  margin-top: 1px;
+}
+
+
+.skills-toggle {
+  margin-top: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-ghost);
+  width: 100%;
+
+  &:hover {
+    color: var(--ink-muted);
+  }
+}
+
+.chevron {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+  transform: rotate(-90deg);
+
+  &.open {
+    transform: rotate(0deg);
+  }
+}
+
+.skills-section {
+  width: 100%;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 4px;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 4px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 3px;
+  text-align: left;
+  width: 100%;
+  transition: background 0.1s;
+
+  &:hover {
+    background: var(--parchment-hover);
+  }
+}
+
+.prof-dot {
+  font-size: 11px;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.skill-bonus {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Roboto Mono', monospace;
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.skill-name {
+  font-size: 11px;
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.save-row-inline {
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+
+  .save-name {
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+}
