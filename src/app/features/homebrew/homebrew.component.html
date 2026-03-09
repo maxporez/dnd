@@ -239,6 +239,34 @@
           </button>
         </div>
 
+        <div class="item-filters">
+          <div class="filter-row">
+            <span class="filter-label">Catégorie :</span>
+            <div class="filter-chips">
+              @for (cat of itemCategories; track cat.id) {
+                <button
+                  class="filter-chip"
+                  [class.active]="itemCategoryFilter() === cat.id"
+                  (click)="toggleCategoryFilter(cat.id)"
+                >{{ cat.label }}</button>
+              }
+            </div>
+          </div>
+          <div class="filter-row">
+            <span class="filter-label">Rareté :</span>
+            <div class="filter-chips">
+              @for (r of itemRarities; track r.id) {
+                <button
+                  class="filter-chip rarity-filter-chip"
+                  [class.active]="itemRarityFilter() === r.id"
+                  [attr.data-rarity]="r.id || 'common'"
+                  (click)="toggleRarityFilter(r.id)"
+                >{{ r.label }}</button>
+              }
+            </div>
+          </div>
+        </div>
+
         @if (isLoading()) {
           <div class="loading-container">
             <mat-icon class="spinner">hourglass_empty</mat-icon>
