@@ -76,8 +76,8 @@ type Mode = 'login' | 'register' | 'magic';
                     <mat-spinner diameter="20" />
                   } @else {
                     <mat-icon>login</mat-icon>
-                    Se connecter
                   }
+                  @if (!submitting()) { Se connecter }
                 </button>
               </div>
             </mat-tab>
@@ -124,8 +124,8 @@ type Mode = 'login' | 'register' | 'magic';
                     <mat-spinner diameter="20" />
                   } @else {
                     <mat-icon>person_add</mat-icon>
-                    Créer mon compte
                   }
+                  @if (!submitting()) { Créer mon compte }
                 </button>
               </div>
             </mat-tab>
@@ -165,8 +165,8 @@ type Mode = 'login' | 'register' | 'magic';
                   <mat-spinner diameter="20" />
                 } @else {
                   <mat-icon>send</mat-icon>
-                  Envoyer le lien magique
                 }
+                @if (!submitting()) { Envoyer le lien magique }
               </button>
             </div>
           } @else {
