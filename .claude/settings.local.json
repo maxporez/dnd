@@ -34,7 +34,23 @@
       "Bash(cmd //c \"taskkill /PID 604 /F\")",
       "Bash(grep -r \"$.*-palette\" node_modules/@angular/material/_index.scss)",
       "Bash(sed -i \"s/import type { SkillName, AbilityName } from ''..\\\\/..\\\\/..\\\\/..\\\\/models\\\\/stats.model'';/import type { SkillName, AbilityName, AbilityScores } from ''..\\\\/..\\\\/..\\\\/..\\\\/models\\\\/stats.model'';/\" \"c:/Users/maxpo/dev/dnd/src/app/features/character-sheet/components/skills-list/skills-list.component.ts\")",
-      "Bash(sed -i 's/abilityModifiers = input<Record<string, number>>\\({}\\)/abilityModifiers = input<Partial<AbilityScores>>\\({}\\)/' \"c:/Users/maxpo/dev/dnd/src/app/features/character-sheet/components/skills-list/skills-list.component.ts\")"
+      "Bash(sed -i 's/abilityModifiers = input<Record<string, number>>\\({}\\)/abilityModifiers = input<Partial<AbilityScores>>\\({}\\)/' \"c:/Users/maxpo/dev/dnd/src/app/features/character-sheet/components/skills-list/skills-list.component.ts\")",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/features)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/core/services)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/core/state)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/core/guards)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/shared/components)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/shared/pipes)",
+      "Bash(rtk ls c:/Users/maxpo/dev/*)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/features/character-sheet/components)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/features/character-sheet/grimoire)",
+      "Bash(rtk ls c:/Users/maxpo/dev/dnd/src/app/features/character-sheet/inventaire)",
+      "Bash(for dir in ability-scores character-nav combat-stats hit-points saving-throws skills-list)",
+      "Bash(do echo \"=== $dir ===\")",
+      "Bash(done)",
+      "Bash(rtk npm run build)"
     ]
   }
 }
