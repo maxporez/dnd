@@ -151,6 +151,94 @@
   line-height: 1.4;
 }
 
+// Item filters
+.item-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 72px;
+  flex-shrink: 0;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-chip {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.5;
+  font-family: inherit;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  &.active {
+    background: rgba(187, 134, 252, 0.18);
+    border-color: #bb86fc;
+    color: #bb86fc;
+  }
+}
+
+.rarity-filter-chip {
+  &[data-rarity='common'].active {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  &[data-rarity='Uncommon'].active {
+    background: rgba(76, 175, 80, 0.18);
+    border-color: #81c784;
+    color: #81c784;
+  }
+  &[data-rarity='Rare'].active {
+    background: rgba(33, 150, 243, 0.18);
+    border-color: #64b5f6;
+    color: #64b5f6;
+  }
+  &[data-rarity='Very Rare'].active {
+    background: rgba(156, 39, 176, 0.18);
+    border-color: #ce93d8;
+    color: #ce93d8;
+  }
+  &[data-rarity='Legendary'].active {
+    background: rgba(255, 152, 0, 0.18);
+    border-color: #ffb74d;
+    color: #ffb74d;
+  }
+}
+
 // Empty / loading states
 .loading-container {
   display: flex;

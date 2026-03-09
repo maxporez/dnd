@@ -50,6 +50,27 @@ export class HomebrewComponent implements OnInit {
   // Local state
   readonly searchQuery = signal('');
   readonly isImportingHerbs = signal(false);
+  readonly itemCategoryFilter = signal('');
+  readonly itemRarityFilter = signal<string | null>(null);
+
+  // Filter options
+  readonly itemCategories = [
+    { id: 'weapon', label: 'Arme' },
+    { id: 'armor', label: 'Armure' },
+    { id: 'adventuring-gear', label: 'Équipement' },
+    { id: 'tool', label: 'Outil' },
+    { id: 'magic-item', label: 'Objet magique' },
+    { id: 'consumable', label: 'Consommable' },
+    { id: 'herb', label: 'Herbe' },
+  ] as const;
+
+  readonly itemRarities = [
+    { id: '', label: 'Commun' },
+    { id: 'Uncommon', label: 'Peu commun' },
+    { id: 'Rare', label: 'Rare' },
+    { id: 'Very Rare', label: 'Très rare' },
+    { id: 'Legendary', label: 'Légendaire' },
+  ] as const;
 
   // Proxied signals from state
   readonly races = this.gameDataState.races;
@@ -93,12 +114,19 @@ export class HomebrewComponent implements OnInit {
 
   readonly filteredItems = computed(() => {
     const query = this.searchQuery().toLowerCase().trim();
-    if (!query) return this.items();
-    return this.items().filter(i =>
-      i.name.toLowerCase().includes(query) ||
-      i.source.toLowerCase().includes(query) ||
-      i.category.toLowerCase().includes(query),
-    );
+    const category = this.itemCategoryFilter();
+    const rarity = this.itemRarityFilter();
+
+    return this.items().filter(i => {
+      if (query && !(
+        i.name.toLowerCase().includes(query) ||
+        i.source.toLowerCase().includes(query) ||
+        i.category.toLowerCase().includes(query)
+      )) return false;
+      if (category && i.category !== category) return false;
+      if (rarity !== null && (i.rarity ?? '') !== rarity) return false;
+      return true;
+    });
   });
 
   ngOnInit(): void {
@@ -107,6 +135,14 @@ export class HomebrewComponent implements OnInit {
 
   onSearchChange(value: string): void {
     this.searchQuery.set(value);
+  }
+
+  toggleCategoryFilter(categoryId: string): void {
+    this.itemCategoryFilter.set(this.itemCategoryFilter() === categoryId ? '' : categoryId);
+  }
+
+  toggleRarityFilter(rarityId: string): void {
+    this.itemRarityFilter.set(this.itemRarityFilter() === rarityId ? null : rarityId);
   }
 
   // --- Race actions ---
