@@ -1,0 +1,191 @@
+@if (characterState.loading()) {
+  <div class="page-container">
+    <app-loading-spinner message="Chargement..." />
+  </div>
+} @else if (character(); as char) {
+  <div class="page-container grimoire-page">
+
+    <!-- Header -->
+    <div class="page-header">
+      <app-back-button />
+      <h1 class="char-name">{{ char.name || 'Personnage' }}</h1>
+      @if (characterState.saving()) {
+        <mat-icon class="saving-icon">sync</mat-icon>
+      }
+    </div>
+
+    <!-- Nav tabs -->
+    <app-character-nav [characterId]="characterId()" />
+
+    <!-- Spell Slots Tracker -->
+    <mat-card class="slots-card">
+      <mat-card-header>
+        <mat-card-title>Emplacements de sorts</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="slots-grid">
+          @for (level of spellLevels; track level) {
+            @let slot = getSlotInfo(level);
+            <div class="slot-row" [class.no-slots]="slot.max === 0">
+              <span class="slot-level">Niv. {{ level }}</span>
+              <div class="slot-circles">
+                @for (i of [].constructor(slot.max); track $index) {
+                  <button
+                    class="slot-circle"
+                    [class.used]="$index < slot.used"
+                    (click)="$index < slot.used ? recoverSlot(level) : useSlot(level)"
+                    [matTooltip]="$index < slot.used ? 'Récupérer' : 'Utiliser'"
+                  >
+                    <span class="slot-dot"></span>
+                  </button>
+                }
+                @if (slot.max === 0) {
+                  <span class="slot-empty">—</span>
+                }
+              </div>
+              <input
+                type="number"
+                class="slot-max-input"
+                [value]="slot.max"
+                (change)="updateSlotMax(level, $any($event.target).value)"
+                min="0"
+                max="9"
+                matTooltip="Max emplacements"
+              />
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Toolbar -->
+    <div class="grimoire-toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          placeholder="Rechercher un sort..."
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+        />
+        @if (searchQuery()) {
+          <button matSuffix mat-icon-button (click)="searchQuery.set('')">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        [class.active-filter]="showPreparedOnly()"
+        (click)="showPreparedOnly.set(!showPreparedOnly())"
+        matTooltip="Afficher uniquement les sorts préparés"
+      >
+        <mat-icon>bolt</mat-icon>
+        Préparés
+      </button>
+
+      <button mat-flat-button color="primary" (click)="openSpellPicker()">
+        <mat-icon>add</mat-icon>
+        Ajouter
+      </button>
+    </div>
+
+    <!-- Level filter chips -->
+    <div class="level-filter-row">
+      <button
+        class="level-chip"
+        [class.active]="levelFilter() === null"
+        (click)="levelFilter.set(null)"
+      >Tous</button>
+      <button
+        class="level-chip"
+        [class.active]="levelFilter() === 0"
+        (click)="levelFilter.set(levelFilter() === 0 ? null : 0)"
+      >Tours</button>
+      @for (n of spellLevels; track n) {
+        <button
+          class="level-chip"
+          [class.active]="levelFilter() === n"
+          (click)="levelFilter.set(levelFilter() === n ? null : n)"
+        >Niv. {{ n }}</button>
+      }
+    </div>
+
+    <!-- Empty state -->
+    @if (filteredSpells().length === 0) {
+      <div class="empty-state">
+        <mat-icon>auto_stories</mat-icon>
+        @if (char.spells.length === 0) {
+          <p>Aucun sort dans le grimoire</p>
+          <button mat-flat-button color="primary" (click)="openSpellPicker()">
+            <mat-icon>add</mat-icon>
+            Ajouter un sort
+          </button>
+        } @else {
+          <p>Aucun sort ne correspond au filtre</p>
+        }
+      </div>
+    } @else {
+      <!-- Spells grouped by level -->
+      @for (level of getLevelEntries(); track level) {
+        <section class="spell-section">
+          <h3 class="level-heading">
+            <mat-icon>{{ level === 0 ? 'star' : 'layers' }}</mat-icon>
+            {{ getLevelLabel(level) }}
+            <span class="spell-count">{{ spellsByLevel().get(level)!.length }}</span>
+          </h3>
+
+          <mat-card class="spells-card">
+            @for (spell of spellsByLevel().get(level)!; track spell.spellId; let last = $last) {
+              <div class="spell-row">
+                <!-- Prepared toggle -->
+                <button
+                  mat-icon-button
+                  class="prepared-btn"
+                  [class.prepared]="spell.prepared || spell.alwaysPrepared"
+                  [class.always]="spell.alwaysPrepared"
+                  [disabled]="spell.alwaysPrepared"
+                  (click)="togglePrepared(spell)"
+                  [matTooltip]="spell.alwaysPrepared ? 'Toujours préparé' : spell.prepared ? 'Dépreparer' : 'Préparer'"
+                >
+                  <mat-icon>{{ spell.alwaysPrepared ? 'auto_awesome' : spell.prepared ? 'bolt' : 'radio_button_unchecked' }}</mat-icon>
+                </button>
+
+                <!-- Spell info -->
+                <div class="spell-info">
+                  <span class="spell-name">{{ spell.name }}</span>
+                  <div class="spell-tags">
+                    @if (getSpellSchool(spell.spellId)) {
+                      <span class="tag school-tag">{{ getSpellSchool(spell.spellId) }}</span>
+                    }
+                    @if (getSpellCastingTime(spell.spellId)) {
+                      <span class="tag">{{ getSpellCastingTime(spell.spellId) }}</span>
+                    }
+                    @if (isConcentration(spell.spellId)) {
+                      <span class="tag conc-tag" matTooltip="Concentration">C</span>
+                    }
+                    @if (spell.isHomebrew) {
+                      <span class="tag homebrew-tag">Homebrew</span>
+                    }
+                  </div>
+                </div>
+
+                <!-- Delete -->
+                <button mat-icon-button class="delete-btn" (click)="removeSpell(spell)" matTooltip="Retirer">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+
+              @if (!last) {
+                <mat-divider />
+              }
+            }
+          </mat-card>
+        </section>
+      }
+    }
+
+    <p class="spell-count-total">{{ filteredSpells().length }} sort(s)</p>
+  </div>
+}

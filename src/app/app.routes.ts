@@ -20,10 +20,29 @@ export const routes: Routes = [
   {
     path: 'character/:id',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/character-sheet/character-sheet.component').then(
-        (m) => m.CharacterSheetComponent,
-      ),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/character-sheet/character-sheet.component').then(
+            (m) => m.CharacterSheetComponent,
+          ),
+      },
+      {
+        path: 'inventaire',
+        loadComponent: () =>
+          import('./features/character-sheet/inventaire/inventaire.component').then(
+            (m) => m.InventaireComponent,
+          ),
+      },
+      {
+        path: 'grimoire',
+        loadComponent: () =>
+          import('./features/character-sheet/grimoire/grimoire.component').then(
+            (m) => m.GrimoireComponent,
+          ),
+      },
+    ],
   },
   {
     path: 'homebrew',
