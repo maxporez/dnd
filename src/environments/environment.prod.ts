@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   supabase: {
-    url: (import.meta as any).env['NG_APP_SUPABASE_URL'] ?? '',
-    anonKey: (import.meta as any).env['NG_APP_SUPABASE_ANON_KEY'] ?? '',
+    url: (process.env as any)['NG_APP_SUPABASE_URL'] ?? '',
+    anonKey: (process.env as any)['NG_APP_SUPABASE_ANON_KEY'] ?? '',
   },
 };

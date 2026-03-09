@@ -50,7 +50,11 @@
       "Bash(for dir in ability-scores character-nav combat-stats hit-points saving-throws skills-list)",
       "Bash(do echo \"=== $dir ===\")",
       "Bash(done)",
-      "Bash(rtk npm run build)"
+      "Bash(rtk npm run build)",
+      "Bash(rtk grep \"builder\\\\|NG_APP\" angular.json)",
+      "Bash(rtk grep \"@types/node\" package.json)",
+      "Bash(rtk tsc --noEmit -p tsconfig.app.json)",
+      "Bash(npx tsc --noEmit -p tsconfig.app.json)"
     ]
   }
 }
