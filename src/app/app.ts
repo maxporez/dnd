@@ -1,5 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, computed } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, startWith } from 'rxjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,24 +21,17 @@ import { AuthService } from './core/services/auth.service';
       <span class="spacer"></span>
 
       @if (auth.isAuthenticated()) {
-        <nav class="nav-links">
+        <!-- Nav desktop (cachée sur mobile) -->
+        <nav class="top-nav">
           <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>people</mat-icon>
-            <span class="nav-label">Personnages</span>
+            Personnages
           </a>
           <a mat-button routerLink="/homebrew" routerLinkActive="active">
             <mat-icon>build</mat-icon>
-            <span class="nav-label">Homebrew</span>
-          </a>
-          <a mat-button routerLink="/notion" routerLinkActive="active">
-            <mat-icon>sync</mat-icon>
-            <span class="nav-label">Notion</span>
+            Homebrew
           </a>
         </nav>
-
-        <span class="user-email nav-label" [matTooltip]="auth.currentUser()?.email ?? ''">
-          {{ auth.currentUser()?.email }}
-        </span>
 
         <button mat-icon-button (click)="auth.signOut()" matTooltip="Se déconnecter">
           <mat-icon>logout</mat-icon>
@@ -47,6 +42,20 @@ import { AuthService } from './core/services/auth.service';
     <main class="app-content">
       <router-outlet />
     </main>
+
+    <!-- Nav bottom (mobile uniquement, cachée sur desktop et sur les pages perso) -->
+    @if (auth.isAuthenticated() && !isCharacterPage()) {
+      <nav class="bottom-nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="bottom-nav-item">
+          <mat-icon>people</mat-icon>
+          <span>Personnages</span>
+        </a>
+        <a routerLink="/homebrew" routerLinkActive="active" class="bottom-nav-item">
+          <mat-icon>build</mat-icon>
+          <span>Homebrew</span>
+        </a>
+      </nav>
+    }
   `,
   styles: `
     :host {
@@ -76,42 +85,97 @@ import { AuthService } from './core/services/auth.service';
       flex: 1;
     }
 
-    .nav-links {
+    /* Nav desktop */
+    .top-nav {
       display: flex;
       gap: 4px;
+      margin-right: 8px;
     }
 
-    .nav-links a {
+    .top-nav a {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
 
-    .nav-links a.active {
+    .top-nav a.active {
       background: rgba(255, 255, 255, 0.1);
     }
 
+    /* Contenu principal */
     .app-content {
       flex: 1;
     }
 
-    .user-email {
-      font-size: 13px;
-      opacity: 0.85;
-      margin: 0 4px 0 12px;
-      max-width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    /* Bottom navigation (mobile) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: none; /* cachée par défaut, affichée sur mobile */
+      background: #1e1e3a;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      height: 64px;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    @media (max-width: 600px) {
-      .nav-label {
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      font-size: 11px;
+      font-family: Roboto, sans-serif;
+      transition: color 0.2s;
+      min-height: 48px;
+    }
+
+    .bottom-nav-item mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+      transition: color 0.2s;
+    }
+
+    .bottom-nav-item.active {
+      color: #d5baff;
+    }
+
+    .bottom-nav-item:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    @media (max-width: 768px) {
+      .top-nav {
         display: none;
+      }
+
+      .bottom-nav {
+        display: flex;
+      }
+
+      .app-content {
+        padding-bottom: 72px;
       }
     }
   `,
 })
 export class App {
   readonly auth = inject(AuthService);
+
+  private readonly router = inject(Router);
+  private readonly url = toSignal(
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map(e => (e as NavigationEnd).urlAfterRedirects),
+      startWith(this.router.url),
+    )
+  );
+  readonly isCharacterPage = computed(() => this.url()?.startsWith('/character/') ?? false);
 }

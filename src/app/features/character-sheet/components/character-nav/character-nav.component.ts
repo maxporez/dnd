@@ -11,25 +11,29 @@ import { MatIconModule } from '@angular/material/icon';
       <a mat-button
         [routerLink]="['/character', characterId()]"
         routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="char-nav-item">
         <mat-icon>person</mat-icon>
         <span>Fiche</span>
       </a>
       <a mat-button
         [routerLink]="['/character', characterId(), 'inventaire']"
-        routerLinkActive="active">
+        routerLinkActive="active"
+        class="char-nav-item">
         <mat-icon>backpack</mat-icon>
         <span>Inventaire</span>
       </a>
       <a mat-button
         [routerLink]="['/character', characterId(), 'grimoire']"
-        routerLinkActive="active">
+        routerLinkActive="active"
+        class="char-nav-item">
         <mat-icon>auto_stories</mat-icon>
         <span>Grimoire</span>
       </a>
     </nav>
   `,
   styles: `
+    /* Desktop : tabs inline au-dessus du contenu */
     .char-nav {
       display: flex;
       gap: 4px;
@@ -38,14 +42,12 @@ import { MatIconModule } from '@angular/material/icon';
       padding-bottom: 4px;
     }
 
-    .char-nav a {
+    .char-nav-item {
       display: flex;
       align-items: center;
       gap: 6px;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.55);
-      border-radius: 6px 6px 0 0;
-      padding: 6px 14px;
 
       mat-icon {
         font-size: 18px;
@@ -61,8 +63,56 @@ import { MatIconModule } from '@angular/material/icon';
       }
 
       &:hover:not(.active) {
-        background: rgba(255, 255, 255, 0.05);
         color: rgba(255, 255, 255, 0.85);
+      }
+    }
+
+    /* Mobile : barre fixe en bas */
+    @media (max-width: 768px) {
+      .char-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: #1e1e3a;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: env(safe-area-inset-bottom);
+        height: 64px;
+      }
+
+      .char-nav-item {
+        flex: 1;
+        height: 100%;
+        border-radius: 0;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 11px;
+
+        /* Forcer le contenu mat-button en colonne centrée */
+        ::ng-deep .mdc-button__label {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          width: 100%;
+        }
+
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+
+        &.active {
+          color: #d5baff;
+          background: transparent;
+          border-bottom: none;
+          margin-bottom: 0;
+          border-top: 2px solid #d5baff;
+        }
       }
     }
   `,

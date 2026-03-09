@@ -76,14 +76,5 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: 'notion',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/notion-sync/notion-sync.component').then(
-        (m) => m.NotionSyncComponent,
-      ),
-  },
-
   { path: '**', redirectTo: '' },
 ];

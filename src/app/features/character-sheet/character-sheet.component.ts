@@ -1,4 +1,4 @@
-import { Component, inject, computed, effect, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, computed, signal, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -31,8 +31,7 @@ import type { Character } from '../../models/character.model';
     MatIconModule, MatButtonModule,
     LoadingSpinnerComponent, BackButtonComponent,
     AbilityScoresComponent, SkillsListComponent, SavingThrowsComponent,
-    CombatStatsComponent, HitPointsComponent,
-    CharacterNavComponent,
+    CombatStatsComponent, HitPointsComponent, CharacterNavComponent,
   ],
   template: `
     @if (characterState.loading()) {
@@ -52,14 +51,22 @@ import type { Character } from '../../models/character.model';
         <!-- Header -->
         <div class="sheet-header">
           <app-back-button />
-          <mat-form-field class="name-input" appearance="outline">
+          @if (editingName()) {
             <input
-              matInput
+              class="name-edit"
               [ngModel]="char.name"
               (ngModelChange)="onNameChange($event)"
+              (blur)="editingName.set(false)"
+              (keydown.enter)="editingName.set(false)"
               placeholder="Nom du personnage"
+              autofocus
             />
-          </mat-form-field>
+          } @else {
+            <h1 class="char-name" (click)="editingName.set(true)">
+              {{ char.name || 'Nom du personnage' }}
+              <mat-icon class="name-edit-icon">edit</mat-icon>
+            </h1>
+          }
           @if (characterState.saving()) {
             <mat-icon class="saving-indicator">sync</mat-icon>
           }
@@ -166,22 +173,55 @@ import type { Character } from '../../models/character.model';
     .sheet-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 16px;
     }
 
-    .name-input {
+    .char-name {
       flex: 1;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1.2;
 
-      ::ng-deep input {
-        font-size: 20px;
-        font-weight: 600;
+      &:hover .name-edit-icon {
+        opacity: 1;
       }
+    }
+
+    .name-edit-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      opacity: 0.35;
+      transition: opacity 0.2s;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .name-edit {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #d5baff;
+      outline: none;
+      color: #e0e0e0;
+      font-size: 22px;
+      font-weight: 600;
+      font-family: Roboto, sans-serif;
+      padding: 2px 0;
+      width: 100%;
     }
 
     .saving-indicator {
       animation: spin 1s linear infinite;
       color: rgba(255, 255, 255, 0.5);
+      flex-shrink: 0;
     }
 
     @keyframes spin {
@@ -257,6 +297,7 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
   readonly character = this.characterState.currentCharacter;
   readonly baseRaces = RACES;
   readonly baseClasses = CLASSES;
+  readonly editingName = signal(false);
 
   private saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
