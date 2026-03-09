@@ -1,0 +1,262 @@
+.inventaire-page {
+  max-width: 800px;
+  padding-bottom: 40px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.char-name {
+  flex: 1;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.saving-icon {
+  animation: spin 1s linear infinite;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// Currency
+.currency-card {
+  margin-bottom: 16px;
+
+  mat-card-content {
+    padding: 12px 16px !important;
+  }
+}
+
+.currency-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.coin-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.coin-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.coin-input {
+  width: 64px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: inherit;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: #bb86fc;
+    background: rgba(187, 134, 252, 0.08);
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+}
+
+.weight-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Toolbar
+.inventory-toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 180px;
+}
+
+.active-filter {
+  border-color: #bb86fc !important;
+  color: #bb86fc !important;
+  background: rgba(187, 134, 252, 0.08);
+}
+
+// Items list
+.items-card {
+  padding: 0;
+}
+
+.items-list {
+  padding: 4px 0;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  transition: background 0.1s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.equip-btn {
+  color: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+
+  &.equipped {
+    color: #4dd0e1;
+  }
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item-name {
+  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-notes {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.homebrew-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(187, 134, 252, 0.15);
+  color: #bb86fc;
+  width: fit-content;
+}
+
+.attune-btn {
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+
+  &.attuned {
+    color: #ffd54f;
+  }
+}
+
+.quantity-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.quantity-val {
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.delete-btn {
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+
+  &:hover {
+    color: #ef5350;
+  }
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 16px;
+  color: rgba(255, 255, 255, 0.3);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.item-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 8px;
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .inventaire-page {
+    padding: 8px;
+    padding-bottom: 40px;
+  }
+
+  .inventory-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      justify-content: center;
+    }
+  }
+
+  .search-field {
+    min-width: unset;
+  }
+
+  .currency-row {
+    gap: 12px;
+  }
+}

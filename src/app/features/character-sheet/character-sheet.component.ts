@@ -17,6 +17,7 @@ import { SkillsListComponent } from './components/skills-list/skills-list.compon
 import { SavingThrowsComponent } from './components/saving-throws/saving-throws.component';
 import { CombatStatsComponent } from './components/combat-stats/combat-stats.component';
 import { HitPointsComponent } from './components/hit-points/hit-points.component';
+import { CharacterNavComponent } from './components/character-nav/character-nav.component';
 import { RACES } from '../../data/base-races.data';
 import { CLASSES } from '../../data/base-classes.data';
 import type { AbilityName, SkillName } from '../../models/stats.model';
@@ -31,6 +32,7 @@ import type { Character } from '../../models/character.model';
     LoadingSpinnerComponent, BackButtonComponent,
     AbilityScoresComponent, SkillsListComponent, SavingThrowsComponent,
     CombatStatsComponent, HitPointsComponent,
+    CharacterNavComponent,
   ],
   template: `
     @if (characterState.loading()) {
@@ -62,6 +64,9 @@ import type { Character } from '../../models/character.model';
             <mat-icon class="saving-indicator">sync</mat-icon>
           }
         </div>
+
+        <!-- Navigation Fiche / Inventaire / Grimoire -->
+        <app-character-nav [characterId]="char.id" />
 
         <!-- Race / Class / Level selectors -->
         <div class="selectors-row">

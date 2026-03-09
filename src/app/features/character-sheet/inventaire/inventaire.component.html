@@ -1,0 +1,165 @@
+@if (characterState.loading()) {
+  <div class="page-container">
+    <app-loading-spinner message="Chargement..." />
+  </div>
+} @else if (character(); as char) {
+  <div class="page-container inventaire-page">
+
+    <!-- Header -->
+    <div class="page-header">
+      <app-back-button />
+      <h1 class="char-name">{{ char.name || 'Personnage' }}</h1>
+      @if (characterState.saving()) {
+        <mat-icon class="saving-icon">sync</mat-icon>
+      }
+    </div>
+
+    <!-- Nav tabs -->
+    <app-character-nav [characterId]="characterId()" />
+
+    <!-- Currency -->
+    <mat-card class="currency-card">
+      <mat-card-content>
+        <div class="currency-row">
+          @for (coin of [
+            { key: 'platinum', label: 'PA', color: '#b0bec5' },
+            { key: 'gold', label: 'PO', color: '#ffd54f' },
+            { key: 'electrum', label: 'PE', color: '#80deea' },
+            { key: 'silver', label: 'PA', color: '#e0e0e0' },
+            { key: 'copper', label: 'PC', color: '#ffab91' }
+          ]; track coin.key) {
+            <div class="coin-field">
+              <span class="coin-label" [style.color]="coin.color">{{ coin.label }}</span>
+              <input
+                type="number"
+                class="coin-input"
+                [value]="$any(char.currency)[$any(coin.key)]"
+                (change)="onCurrencyChange($any(coin.key), $any($event.target).value)"
+                min="0"
+              />
+            </div>
+          }
+        </div>
+        @if (totalWeight() > 0) {
+          <p class="weight-info">
+            <mat-icon>fitness_center</mat-icon>
+            Poids total : {{ totalWeight() | number:'1.0-1' }} lb
+          </p>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Toolbar -->
+    <div class="inventory-toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          placeholder="Rechercher..."
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+        />
+        @if (searchQuery()) {
+          <button matSuffix mat-icon-button (click)="searchQuery.set('')">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        [class.active-filter]="showEquippedOnly()"
+        (click)="showEquippedOnly.set(!showEquippedOnly())"
+        matTooltip="Afficher uniquement les objets équipés"
+      >
+        <mat-icon>shield</mat-icon>
+        Équipé seulement
+      </button>
+
+      <button mat-flat-button color="primary" (click)="openItemPicker()">
+        <mat-icon>add</mat-icon>
+        Ajouter
+      </button>
+    </div>
+
+    <!-- Empty state -->
+    @if (filteredInventory().length === 0) {
+      <div class="empty-state">
+        <mat-icon>backpack</mat-icon>
+        @if (char.inventory.length === 0) {
+          <p>Inventaire vide</p>
+          <button mat-flat-button color="primary" (click)="openItemPicker()">
+            <mat-icon>add</mat-icon>
+            Ajouter un objet
+          </button>
+        } @else {
+          <p>Aucun objet ne correspond au filtre</p>
+        }
+      </div>
+    } @else {
+      <!-- Item list -->
+      <mat-card class="items-card">
+        <div class="items-list">
+          @for (item of filteredInventory(); track item.id; let last = $last) {
+            <div class="item-row">
+              <!-- Equipped toggle -->
+              <button
+                mat-icon-button
+                class="equip-btn"
+                [class.equipped]="item.equipped"
+                (click)="toggleEquipped(item)"
+                [matTooltip]="item.equipped ? 'Déséquiper' : 'Équiper'"
+              >
+                <mat-icon>{{ item.equipped ? 'shield' : 'shield_outlined' }}</mat-icon>
+              </button>
+
+              <!-- Item name + notes -->
+              <div class="item-info">
+                <span class="item-name">{{ item.name }}</span>
+                @if (item.notes) {
+                  <span class="item-notes">{{ item.notes }}</span>
+                }
+                @if (item.isHomebrew) {
+                  <span class="homebrew-badge">Homebrew</span>
+                }
+              </div>
+
+              <!-- Attunement -->
+              <button
+                mat-icon-button
+                class="attune-btn"
+                [class.attuned]="item.attuned"
+                (click)="toggleAttuned(item)"
+                [matTooltip]="item.attuned ? 'Retirer l\'harmonisation' : 'Harmoniser'"
+              >
+                <mat-icon>{{ item.attuned ? 'auto_awesome' : 'radio_button_unchecked' }}</mat-icon>
+              </button>
+
+              <!-- Quantity stepper -->
+              <div class="quantity-ctrl">
+                <button mat-icon-button (click)="changeQuantity(item, -1)" [disabled]="item.quantity <= 0">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="quantity-val">{{ item.quantity }}</span>
+                <button mat-icon-button (click)="changeQuantity(item, 1)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <!-- Delete -->
+              <button mat-icon-button class="delete-btn" (click)="removeItem(item)" matTooltip="Retirer">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+
+            @if (!last) {
+              <mat-divider />
+            }
+          }
+        </div>
+      </mat-card>
+    }
+
+    <p class="item-count">{{ filteredInventory().length }} objet(s)</p>
+  </div>
+}
