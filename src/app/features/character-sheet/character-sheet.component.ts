@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { CharacterState } from '../../core/state/character.state';
 import { GameDataState } from '../../core/state/game-data.state';
@@ -21,14 +22,14 @@ import { CombatStatsCardComponent } from '../../shared/components/cards/combat-s
 import { RACES } from '../../data/base-races.data';
 import { CLASSES } from '../../data/base-classes.data';
 import type { AbilityName, SkillName } from '../../models/stats.model';
-import type { Character } from '../../models/character.model';
+import type { Character, ComputedCharacter } from '../../models/character.model';
 
 @Component({
   selector: 'app-character-sheet',
   imports: [
     FormsModule,
     MatCardModule, MatInputModule, MatFormFieldModule, MatSelectModule,
-    MatIconModule, MatButtonModule,
+    MatIconModule, MatButtonModule, MatTooltipModule,
     LoadingSpinnerComponent, BackButtonComponent,
     AbilityScoresComponent, CharacterNavComponent,
     CharacterIdentityCardComponent, CombatStatsCardComponent,
@@ -127,6 +128,41 @@ import type { Character } from '../../models/character.model';
           />
         </section>
 
+        <!-- Emplacements de sorts -->
+        @let slots = getActiveSpellLevels(char);
+        @if (slots.length > 0) {
+          <section class="sheet-section">
+            <mat-card class="slots-card">
+              <mat-card-header>
+                <mat-card-title>Emplacements de sorts</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="slots-grid">
+                  @for (level of slots; track level) {
+                    @let slot = getSlotInfo(char, level);
+                    <div class="slot-row">
+                      <span class="slot-level">Niv. {{ level }}</span>
+                      <div class="slot-circles">
+                        @for (i of range(slot.max); track $index) {
+                          <button
+                            class="slot-circle"
+                            [class.used]="$index < slot.used"
+                            (click)="$index < slot.used ? recoverSlot(level) : useSlot(level)"
+                            [matTooltip]="$index < slot.used ? 'Récupérer' : 'Utiliser'"
+                          >
+                            <span class="slot-dot"></span>
+                          </button>
+                        }
+                      </div>
+                      <span class="slot-count">{{ slot.used }}/{{ slot.max }}</span>
+                    </div>
+                  }
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </section>
+        }
+
         <!-- Ability Scores + Save + Skills -->
         <section class="sheet-section">
           <app-ability-scores
@@ -207,6 +243,78 @@ import type { Character } from '../../models/character.model';
       margin-bottom: 20px;
     }
 
+    /* Spell Slots */
+    .slots-card mat-card-header {
+      padding-bottom: 8px;
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+    }
+
+    .slot-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      background: var(--parchment-hover);
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .slot-level {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      min-width: 36px;
+    }
+
+    .slot-circles {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .slot-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slot-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: transparent;
+      transition: all 0.15s;
+    }
+
+    .slot-circle.used .slot-dot {
+      background: var(--arcane);
+      border-color: var(--arcane);
+    }
+
+    .slot-circle:hover .slot-dot {
+      border-color: var(--ink-secondary);
+    }
+
+    .slot-count {
+      font-size: 11px;
+      color: var(--ink-muted);
+      min-width: 28px;
+      text-align: right;
+    }
 
     .error-container {
       display: flex;
@@ -367,6 +475,42 @@ export class CharacterSheetComponent implements OnInit, OnDestroy {
         ...char.currentState,
         hitPoints: hp,
       },
+    });
+  }
+
+  // --- Spell Slots ---
+
+  readonly spellLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+
+  getActiveSpellLevels(char: ComputedCharacter): number[] {
+    return this.spellLevels.filter(lvl => (char.spellSlots?.[lvl]?.max ?? 0) > 0);
+  }
+
+  getSlotInfo(char: ComputedCharacter, level: number): { max: number; used: number } {
+    return char.spellSlots?.[level] ?? { max: 0, used: 0 };
+  }
+
+  range(n: number): number[] {
+    return Array.from({ length: n });
+  }
+
+  useSlot(level: number): void {
+    const char = this.character();
+    if (!char) return;
+    const slot = char.spellSlots?.[level] ?? { max: 0, used: 0 };
+    if (slot.used >= slot.max) return;
+    this.characterState.save(char.id, {
+      spellSlots: { ...char.spellSlots, [level]: { ...slot, used: slot.used + 1 } },
+    });
+  }
+
+  recoverSlot(level: number): void {
+    const char = this.character();
+    if (!char) return;
+    const slot = char.spellSlots?.[level] ?? { max: 0, used: 0 };
+    if (slot.used <= 0) return;
+    this.characterState.save(char.id, {
+      spellSlots: { ...char.spellSlots, [level]: { ...slot, used: slot.used - 1 } },
     });
   }
 }
